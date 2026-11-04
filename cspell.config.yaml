@@ -1,21 +1,86 @@
+# 启用的词典，对所有文件生效。
+# @see https://cspell.org/docs/Configuration/properties#settings-dictionaries
+dictionaries:
+  - libraries
+  - usernames
+
+# 自定义词典。词直接写在 words 里，也可以用 path 指向外部词典文件。
+# noSuggest 的词典只放行拼写，不会被拿来当修改建议，效果同 ignoreWords。
+# @see https://cspell.org/docs/Configuration/properties#settings-dictionarydefinitions
+dictionaryDefinitions:
+  # 库、工具、框架的名称。
+  - name: libraries
+    words:
+      # 请求库 Alova
+      - alova
+      # UnoCSS 的属性化模式 presetAttributify
+      - attributify
+      - esbuild
+      # 图标集 Iconify
+      - iconify
+      # Oxc 的格式化工具
+      - oxfmt
+      # Oxc 的 lint 工具
+      - oxlint
+      # PostCSS 的文件扩展名与 languageId
+      - pcss
+      # 标签输入组件 Tagify
+      - tagify
+      - unocss
+      - vite
+      # Vue 拖拽排序组件
+      - vuedraggable
+      - vueuse
+
+  # 人或组织的 id，常见于 npm scope、GitHub 仓库地址、VS Code 扩展 id。
+  - name: usernames
+    noSuggest: true
+    words:
+      # @antfu/eslint-config、扩展 antfu.unocss
+      - antfu
+      # 扩展 dbaeumer.vscode-eslint
+      - dbaeumer
+      # 本人
+      - zhzwz
+
 # 跳过这些路径。glob 相对于本配置文件所在目录。
 # @see https://cspell.org/docs/Configuration/properties#settings-ignorepaths
 ignorePaths:
   - .git
+  - bun.lock
   - dist
   - node_modules
+  - package.json
   - pnpm-lock.yaml
 
 # 不报错，也不收进词典，不会被拿来当修改建议。写在 flagWords 里也会被这里盖掉。
 # @see https://cspell.org/docs/Configuration/properties#settings-ignorewords
 ignoreWords:
-  - dbaeumer
-  - iconify
+  # Iconify IntelliSense 扩展的设置项 iconify.inplace
   - inplace
-  - unocss
-  - zhzwz
+
+# 按语言类型启用词典，与上面的 dictionaries 叠加。词典名前加 ! 表示关闭。
+# languageId 同 VS Code 的语言标识，多个用逗号分隔。
+# @see https://cspell.org/docs/Configuration/properties#settings-languagesettings
+# languageSettings:
+#   - dictionaries:
+#       - libraries
+#     languageId: typescript,vue
+#   - dictionaries:
+#       - '!npm'
+#     languageId: markdown
+
+# 按文件路径启用词典，与上面的 dictionaries 叠加。filename 是 glob，相对于本配置文件所在目录。
+# @see https://cspell.org/docs/Configuration/properties#settings-overrides
+# overrides:
+#   - dictionaries:
+#       - npm
+#     filename: '**/*.{yaml,yml}'
 
 # 收进词典，算正确拼写，也可以被拿来当修改建议。
 # @see https://cspell.org/docs/Configuration/properties#settings-words
 words:
+  # 去重，pnpm dedupe
   - dedupe
+  # Vue 的虚拟节点 VNode
+  - vnode
