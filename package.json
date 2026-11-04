@@ -1,7 +1,7 @@
 {
   "name": "@zhzwz/z",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packageManager": "pnpm@12.4.1",
   "description": "Personal toolkit",
   "author": "zhzwz",
