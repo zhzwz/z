@@ -17,8 +17,6 @@
     "skipLibCheck": true
   },
   "include": [
-    "index.ts",
-    "tsdown.config.ts",
-    "eslint.config.ts"
+    "index.ts"
   ]
 }

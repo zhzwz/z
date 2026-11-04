@@ -24,7 +24,7 @@
     "build": "tsdown",
     "lint": "eslint .",
     "test": "pnpm -r --if-present test",
-    "typecheck": "tsc -p . && tsc -p playground && pnpm -r --if-present typecheck",
+    "typecheck": "tsc -p . && tsc -p tsconfig.node.json && tsc -p playground && pnpm -r --if-present typecheck",
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
@@ -36,6 +36,7 @@
     }
   },
   "devDependencies": {
+    "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
     "jiti": "^2.7.0",
     "tsdown": "^0.23.4",

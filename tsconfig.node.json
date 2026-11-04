@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "ES2024"
+    ],
+    "types": [
+      "node"
+    ],
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "tsdown.config.ts",
+    "eslint.config.ts",
+    "packages/eslint-config/env.d.ts"
+  ]
+}
