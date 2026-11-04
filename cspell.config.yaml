@@ -1,0 +1,21 @@
+# 跳过这些路径。glob 相对于本配置文件所在目录。
+# @see https://cspell.org/docs/Configuration/properties#settings-ignorepaths
+ignorePaths:
+  - .git
+  - dist
+  - node_modules
+  - pnpm-lock.yaml
+
+# 不报错，也不收进词典，不会被拿来当修改建议。写在 flagWords 里也会被这里盖掉。
+# @see https://cspell.org/docs/Configuration/properties#settings-ignorewords
+ignoreWords:
+  - dbaeumer
+  - iconify
+  - inplace
+  - unocss
+  - zhzwz
+
+# 收进词典，算正确拼写，也可以被拿来当修改建议。
+# @see https://cspell.org/docs/Configuration/properties#settings-words
+words:
+  - dedupe

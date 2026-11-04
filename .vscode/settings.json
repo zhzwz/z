@@ -1,0 +1,58 @@
+{
+  "cSpell.autoFormatConfigFile": false,
+  "cSpell.autocorrect": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.markdownlint": "explicit",
+    "source.fixAll.stylelint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": false,
+  "editor.insertSpaces": true,
+  "editor.linkedEditing": true,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "eslint.enable": true,
+  "eslint.rules.customizations": [
+    { "rule": "@cspell/spellchecker", "severity": "off" }
+  ],
+  "eslint.validate": [
+    "css",
+    "html",
+    "ignore",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "jsonc",
+    "markdown",
+    "properties",
+    "typescript",
+    "vue",
+    "yaml"
+  ],
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "$(capture).test.ts",
+    "package.json": "",
+    "pnpm-workspace.yaml": "pnpm-lock.yaml",
+    "tsconfig.json": "tsconfig.*.json"
+  },
+  "files.associations": {
+    "**/tsconfig.json": "jsonc"
+  },
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "iconify.inplace": false,
+  "json.schemaDownload.enable": true,
+  "npm.autoDetect": "off",
+  "search.exclude": {
+    "**/dist": true,
+    "**/node_modules": true
+  }
+}

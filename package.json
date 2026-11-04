@@ -1,0 +1,44 @@
+{
+  "name": "@zhzwz/z",
+  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "pnpm@12.4.1",
+  "description": "",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --filter playground dev",
+    "build": "tsdown",
+    "lint": "eslint .",
+    "typecheck": "tsc -p . && tsc -p playground",
+    "prepublishOnly": "pnpm build"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "vue": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@zhzwz/eslint-config": "^0.1.0",
+    "eslint": "^10.14.0",
+    "jiti": "^2.7.0",
+    "tsdown": "^0.23.4",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,17 @@
+# install、add、update、remove、dedupe 时，删掉 minimumReleaseAgeExclude 里锁文件已不再解析的条目。通配符保留。
+# @see https://pnpm.io/zh/settings/dependency-resolution#minimumreleaseageexcludeprune
+minimumReleaseAgeExcludePrune: true
+
+# 发布信任弱于更早版本时不装该版本，改选范围内信任未下降的最新版本；没有可选版本则安装失败。按发布时间比较，不是 semver。
+# @see https://pnpm.io/zh/settings/dependency-resolution#trustpolicy
+trustPolicy: no-downgrade
+
+# 用 pnpm 内置的 bash 风格 shell 执行脚本，使 NODE_ENV=test 这类写法在 Windows 上也能跑。node --run 不使用它。
+# @see https://pnpm.io/zh/settings/other#shellemulator
+shellEmulator: true
+
+# 根包始终属于 workspace。再纳入 playground；启用 packages/* 后，packages 的每个直接子目录也会纳入，不递归。
+# @see https://pnpm.io/zh/settings#packages
+packages:
+  # - packages/*
+  - playground
