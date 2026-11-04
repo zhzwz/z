@@ -12,7 +12,9 @@ export interface RuleBlock<T = void> {
 export function splitTextLines(text: string) {
   const hadFinalNewline = text.endsWith('\n')
   const lines = text.split('\n').map((line) => {
-    return line.endsWith('\r') ? line.slice(0, -1) : line
+    return line.endsWith('\r')
+      ? line.slice(0, -1)
+      : line
   })
   if (hadFinalNewline && lines.at(-1) === '') {
     lines.pop()
@@ -36,7 +38,11 @@ export function collectRuleBlocks<T>(
       pending.push(line)
       continue
     }
-    blocks.push({ lead: pending, rule: line, meta: parseMeta(line) })
+    blocks.push({
+      lead: pending,
+      rule: line,
+      meta: parseMeta(line),
+    })
     pending = []
   }
 

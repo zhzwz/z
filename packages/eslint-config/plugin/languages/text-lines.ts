@@ -48,8 +48,18 @@ export class TextLinesSourceCode implements TextSourceCode<TextLinesSourceCodeOp
   }
 
   * traverse() {
-    yield { kind: 1 as const, target: this.ast, phase: 1 as const, args: [this.ast] }
-    yield { kind: 1 as const, target: this.ast, phase: 2 as const, args: [this.ast] }
+    yield {
+      kind: 1 as const,
+      target: this.ast,
+      phase: 1 as const,
+      args: [this.ast],
+    }
+    yield {
+      kind: 1 as const,
+      target: this.ast,
+      phase: 2 as const,
+      args: [this.ast],
+    }
   }
 }
 
@@ -84,6 +94,9 @@ export const textLinesLanguage = {
   },
 
   createSourceCode(file: File, parseResult: OkParseResult<RootNode>, _context: LanguageContext) {
-    return new TextLinesSourceCode({ text: getFileText(file), ast: parseResult.ast })
+    return new TextLinesSourceCode({
+      text: getFileText(file),
+      ast: parseResult.ast,
+    })
   },
 } satisfies TextLinesLanguage

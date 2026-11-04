@@ -1,9 +1,17 @@
 export const DEFAULT_GITATTRIBUTES_PADDING = 4
 
-const CATEGORY_ORDER = ['text', 'binary', 'linguist-generated', 'export-ignore'] as const
+const CATEGORY_ORDER = [
+  'text',
+  'binary',
+  'linguist-generated',
+  'export-ignore',
+] as const
 
 const BUILTIN_MACROS: ReadonlyMap<string, readonly string[]> = new Map([
-  ['binary', ['-diff', '-merge', '-text']],
+  [
+    'binary',
+    ['-diff', '-merge', '-text'],
+  ],
 ])
 
 /** eol 与已废弃的 crlf 会影响 text 的行为，视为同一属性 */

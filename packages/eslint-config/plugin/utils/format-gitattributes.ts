@@ -75,7 +75,10 @@ function collectGitattributesSections(lines: string[]) {
     macroBlocks,
     ruleBlocks: ruleBlocks.map((block): RuleBlock<GitattributesRuleBlockMeta> => ({
       ...block,
-      meta: { ...block.meta, attributes: affectedAttributes(block.meta.entry.attrs, macros) },
+      meta: {
+        ...block.meta,
+        attributes: affectedAttributes(block.meta.entry.attrs, macros),
+      },
     })),
     trailing: lead,
   }

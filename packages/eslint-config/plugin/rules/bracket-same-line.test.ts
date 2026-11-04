@@ -21,27 +21,39 @@ describe('bracket-same-line', () => {
       invalid: [
         {
           code: 'const x = { foo: 1\n}\n',
-          errors: [{ messageId: 'lonelyClose' }],
+          errors: [
+            { messageId: 'lonelyClose' },
+          ],
           output: 'const x = { foo: 1}\n',
         },
         {
           code: 'const x = [1, 2\n]\n',
-          errors: [{ messageId: 'lonelyClose' }],
+          errors: [
+            { messageId: 'lonelyClose' },
+          ],
           output: 'const x = [1, 2]\n',
         },
         {
           code: 'const x = { a: { b: 1\n}\n}\n',
-          errors: [{ messageId: 'lonelyClose' }, { messageId: 'lonelyClose' }],
+          errors: [
+            { messageId: 'lonelyClose' },
+            { messageId: 'lonelyClose' },
+          ],
           output: 'const x = { a: { b: 1}}\n',
         },
         {
           code: 'const a = { x: 1\n}\nconst b = { y: 2\n}\n',
-          errors: [{ messageId: 'lonelyClose' }, { messageId: 'lonelyClose' }],
+          errors: [
+            { messageId: 'lonelyClose' },
+            { messageId: 'lonelyClose' },
+          ],
           output: 'const a = { x: 1}\nconst b = { y: 2}\n',
         },
         {
           code: 'const a = [1,\n]\n// eslint-disable-next-line rule-to-test/bracket-same-line\nconst keep = [2,\n]\n',
-          errors: [{ messageId: 'lonelyClose' }],
+          errors: [
+            { messageId: 'lonelyClose' },
+          ],
           output: 'const a = [1]\n// eslint-disable-next-line rule-to-test/bracket-same-line\nconst keep = [2,\n]\n',
         },
       ],
@@ -78,7 +90,10 @@ const x = { foo: 1
 </template>
 `,
           filename: 'test.vue',
-          errors: [{ messageId: 'lonelyClose' }, { messageId: 'lonelyClose' }],
+          errors: [
+            { messageId: 'lonelyClose' },
+            { messageId: 'lonelyClose' },
+          ],
           output: `<script setup>
 const x = { foo: 1}
 </script>
@@ -95,7 +110,9 @@ const x = { foo: 1}
 </template>
 `,
           filename: 'test.vue',
-          errors: [{ messageId: 'lonelyClose' }],
+          errors: [
+            { messageId: 'lonelyClose' },
+          ],
           output: `<template>
   <div :items="[1, 2]" />
 </template>

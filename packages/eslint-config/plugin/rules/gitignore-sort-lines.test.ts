@@ -16,17 +16,23 @@ describe('gitignore-sort-lines', () => {
       invalid: [
         {
           code: 'b\na\n',
-          errors: [{ messageId: 'gitignoreUnsorted' }],
+          errors: [
+            { messageId: 'gitignoreUnsorted' },
+          ],
           output: 'a\nb\n',
         },
         {
           code: '# note\n\n*.tmp\n*.log\n',
-          errors: [{ messageId: 'gitignoreUnsorted' }],
+          errors: [
+            { messageId: 'gitignoreUnsorted' },
+          ],
           output: '*.log\n# note\n\n*.tmp\n',
         },
         {
           code: 'b\na\n!a/keep\nd\nc\n',
-          errors: [{ messageId: 'gitignoreUnsorted' }],
+          errors: [
+            { messageId: 'gitignoreUnsorted' },
+          ],
           output: 'a\nb\n!a/keep\nc\nd\n',
         },
       ],

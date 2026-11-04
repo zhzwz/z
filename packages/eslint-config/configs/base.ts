@@ -9,17 +9,39 @@ export const baseConfig = {
   rules: {
     curly: ['error', 'all'],
     'no-irregular-whitespace': 'off',
-    'no-console': ['warn', { allow: ['warn', 'error'] }],
-    'vue/component-name-in-template-casing': ['error', 'PascalCase', {
-      registeredComponentsOnly: false,
-      ignores: [],
-    }],
+    'no-console': [
+      'warn',
+      {
+        allow: ['warn', 'error'],
+      },
+    ],
+    'vue/component-name-in-template-casing': [
+      'error',
+      'PascalCase',
+      {
+        registeredComponentsOnly: false,
+        ignores: [],
+      },
+    ],
     'vue/singleline-html-element-content-newline': 'off',
-    'vue/attributes-order': ['warn', { alphabetical: true }],
-    'perfectionist/sort-object-types': ['warn', { type: 'alphabetical', order: 'asc' }],
-    'perfectionist/sort-interfaces': ['warn', { type: 'alphabetical', order: 'asc' }],
+    'vue/attributes-order': [
+      'warn',
+      { alphabetical: true },
+    ],
+    'perfectionist/sort-object-types': [
+      'warn',
+      { type: 'alphabetical', order: 'asc' },
+    ],
+    'perfectionist/sort-interfaces': [
+      'warn',
+      { type: 'alphabetical', order: 'asc' },
+    ],
     'style/brace-style': ['error', '1tbs'],
-    'style/quote-props': ['error', 'as-needed', { unnecessary: true, numbers: true }],
+    'style/quote-props': [
+      'error',
+      'as-needed',
+      { unnecessary: true, numbers: true },
+    ],
     'jsonc/comma-dangle': 'off',
   },
   formatters: {

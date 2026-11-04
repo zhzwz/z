@@ -17,7 +17,9 @@ describe('gitattributes-format-lines', () => {
           code: `*.png binary
 *.md text
 `,
-          errors: [{ messageId: 'gitattributesUnformatted' }],
+          errors: [
+            { messageId: 'gitattributesUnformatted' },
+          ],
           output: `*.md     text
 *.png    binary
 `,
@@ -26,7 +28,9 @@ describe('gitattributes-format-lines', () => {
           code: `"path with spaces" text
 *.md text
 `,
-          errors: [{ messageId: 'gitattributesUnformatted' }],
+          errors: [
+            { messageId: 'gitattributesUnformatted' },
+          ],
           output: `*.md                  text
 "path with spaces"    text
 `,
@@ -34,8 +38,12 @@ describe('gitattributes-format-lines', () => {
         {
           code: `*.md text
 `,
-          options: [{ padding: 2 }],
-          errors: [{ messageId: 'gitattributesUnformatted' }],
+          options: [
+            { padding: 2 },
+          ],
+          errors: [
+            { messageId: 'gitattributesUnformatted' },
+          ],
           output: `*.md  text
 `,
         },
@@ -44,7 +52,9 @@ describe('gitattributes-format-lines', () => {
 [attr]binary -diff -merge -text
 *.md text
 `,
-          errors: [{ messageId: 'gitattributesUnformatted' }],
+          errors: [
+            { messageId: 'gitattributesUnformatted' },
+          ],
           output: `[attr]binary    -diff -merge -text
 *.md            text
 *.png           binary

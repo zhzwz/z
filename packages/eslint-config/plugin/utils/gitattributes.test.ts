@@ -29,15 +29,31 @@ describe('affectedAttributes', () => {
 
   it('expands nested macros defined in the file', () => {
     const macros = new Map([
-      ['outer', ['inner', 'linguist-generated']],
-      ['inner', ['-diff']],
+      [
+        'outer',
+        ['inner', 'linguist-generated'],
+      ],
+      [
+        'inner',
+        ['-diff'],
+      ],
     ])
     expect(affectedAttributes(['outer'], macros))
-      .toEqual(new Set(['outer', 'inner', 'linguist-generated', 'diff']))
+      .toEqual(new Set([
+        'outer',
+        'inner',
+        'linguist-generated',
+        'diff',
+      ]))
   })
 
   it('stops on recursive macros', () => {
-    const macros = new Map([['loop', ['loop', '-text']]])
+    const macros = new Map([
+      [
+        'loop',
+        ['loop', '-text'],
+      ],
+    ])
     expect(affectedAttributes(['loop'], macros)).toEqual(new Set(['loop', 'text']))
   })
 })

@@ -7,7 +7,9 @@ function pairRanges(text: string) {
 
 describe('findBracketPairs', () => {
   it('finds object literal brackets', () => {
-    expect(pairRanges('{ foo: 1 }')).toEqual([[0, 9]])
+    expect(pairRanges('{ foo: 1 }')).toEqual([
+      [0, 9],
+    ])
   })
 
   it('ignores brackets inside double-quoted strings', () => {
@@ -30,6 +32,8 @@ describe('findBracketPairs', () => {
   })
 
   it('still finds array brackets outside template literals', () => {
-    expect(pairRanges('const xs = [1, 2\n]')).toEqual([[11, 17]])
+    expect(pairRanges('const xs = [1, 2\n]')).toEqual([
+      [11, 17],
+    ])
   })
 })

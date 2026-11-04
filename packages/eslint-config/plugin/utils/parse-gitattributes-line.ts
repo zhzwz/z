@@ -82,7 +82,13 @@ export function isGitattributesMacroDefinitionLine(line: string): boolean {
 export function parseGitattributesLine(line: string): GitattributesLineParse {
   const text = line.trim()
   if (text === '') {
-    return { kind: 'rule', pattern: '', rawPattern: '', attrs: [], macroName: '' }
+    return {
+      kind: 'rule',
+      pattern: '',
+      rawPattern: '',
+      attrs: [],
+      macroName: '',
+    }
   }
 
   if (isGitattributesMacroDefinitionLine(text)) {

@@ -19,6 +19,12 @@ export const vscodeSettingsConfig = {
     'jsonc/sort-keys': ['error', 'asc'],
     'jsonc/array-bracket-newline': ['error', 'always'],
     'jsonc/array-element-newline': ['error', 'always'],
-    'jsonc/sort-array-values': ['error', { pathPattern: ORDER_INSENSITIVE_ARRAYS_PATTERN, order: { type: 'asc' } }],
+    'jsonc/sort-array-values': [
+      'error',
+      {
+        pathPattern: ORDER_INSENSITIVE_ARRAYS_PATTERN,
+        order: { type: 'asc' },
+      },
+    ],
   },
 } satisfies TypedFlatConfigItem

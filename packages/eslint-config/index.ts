@@ -20,7 +20,10 @@ export default async function eslintConfigZhzwz(
     gitignoreConfig,
     gitattributesConfig,
   )
-  composer.setDefaultIgnores(prev => [...prev, ...GIT_META_FILES])
+  composer.setDefaultIgnores(prev => [
+    ...prev,
+    ...GIT_META_FILES,
+  ])
 
   return composer
 }

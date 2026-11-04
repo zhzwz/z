@@ -7,7 +7,10 @@ const configFileSortConfig: TypedFlatConfigItem = {
   rules: {
     'yaml/sort-sequence-values': [
       'error',
-      { pathPattern: '.*', order: { type: 'asc' } },
+      {
+        pathPattern: '.*',
+        order: { type: 'asc' },
+      },
     ],
     'yaml/sort-keys': ['error', 'asc'],
   },
@@ -28,12 +31,15 @@ export async function createCspellConfig(
     {
       plugins: { '@cspell': cspellPlugin },
       rules: {
-        '@cspell/spellchecker': ['warn', {
-          configFile: typeof cspellConfigFile === 'string'
-            ? cspellConfigFile
-            : fileURLToPath(cspellConfigFile),
-          autoFix: true,
-        }],
+        '@cspell/spellchecker': [
+          'warn',
+          {
+            configFile: typeof cspellConfigFile === 'string'
+              ? cspellConfigFile
+              : fileURLToPath(cspellConfigFile),
+            autoFix: true,
+          },
+        ],
       },
     },
     configFileSortConfig,

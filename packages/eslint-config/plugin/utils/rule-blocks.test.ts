@@ -50,7 +50,11 @@ describe('collectRuleBlocks', () => {
       () => undefined,
     )
     expect(blocks).toEqual([
-      { lead: ['# docs', ''], rule: '*.log', meta: undefined },
+      {
+        lead: ['# docs', ''],
+        rule: '*.log',
+        meta: undefined,
+      },
     ])
     expect(trailing).toEqual(['# tail'])
   })
@@ -70,7 +74,13 @@ describe('sortRuleBlocks', () => {
 describe('flattenRuleBlocks', () => {
   it('preserves lead, rule, and trailing lines', () => {
     const lines = flattenRuleBlocks(
-      [{ lead: ['# note'], rule: '*.log', meta: undefined }],
+      [
+        {
+          lead: ['# note'],
+          rule: '*.log',
+          meta: undefined,
+        },
+      ],
       ['tail'],
     )
     expect(lines).toEqual(['# note', '*.log', 'tail'])

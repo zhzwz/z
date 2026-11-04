@@ -124,7 +124,9 @@ export function containsLineComment(text: string): boolean {
       return true
     }
     const skipped = skipCodeToken(text, i)
-    i = skipped !== i ? skipped : i + 1
+    i = skipped !== i
+      ? skipped
+      : i + 1
   }
 
   return false
@@ -150,7 +152,9 @@ export function findBracketPairs(text: string): BracketPair[] {
       continue
     }
     if (char === '}' || char === ']') {
-      const expected = char === '}' ? '{' : '['
+      const expected = char === '}'
+        ? '{'
+        : '['
       let top = stack.pop()
       while (top && top.char !== expected) {
         top = stack.pop()

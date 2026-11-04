@@ -20,6 +20,9 @@ export const gitattributesConfig = {
   plugins: { zhzwz: zhzwzPlugin },
   language: 'zhzwz/gitattributes',
   rules: {
-    'zhzwz/gitattributes-format-lines': ['error', { padding: 4 }],
+    'zhzwz/gitattributes-format-lines': [
+      'error',
+      { padding: 4 },
+    ],
   },
 } satisfies TypedFlatConfigItem
