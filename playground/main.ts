@@ -1,7 +1,4 @@
-import { version } from '../index.ts'
+import { createApp } from 'vue'
+import App from './App.vue'
 
-const versionElement = document.querySelector('#version')
-
-if (versionElement) {
-  versionElement.textContent = `version: ${version}`
-}
+createApp(App).mount('#app')

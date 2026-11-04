@@ -1,0 +1,30 @@
+{
+  "name": "@zhzwz/components",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Vue components, bundled and exposed by @zhzwz/z",
+  "sideEffects": [
+    "**/*.css",
+    "**/*.vue"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.5.1",
+    "happy-dom": "^21.0.4",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.0",
+    "vue": "^3.5.44",
+    "vue-tsc": "^3.3.14"
+  }
+}

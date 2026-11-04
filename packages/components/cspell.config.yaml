@@ -1,0 +1,4 @@
+# 沿用仓库根目录的配置。
+# @see https://cspell.org/docs/Configuration/properties#settings-import
+import:
+  - ../../cspell.config.yaml

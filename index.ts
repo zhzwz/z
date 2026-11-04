@@ -1,3 +1,2 @@
-import { version as packageVersion } from './package.json'
-
-export const version = packageVersion
+export { version } from './package.json'
+export * from '@zhzwz/components'

@@ -17,6 +17,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "index.ts"
+    "index.ts",
+    "eslint-config.ts"
   ]
 }

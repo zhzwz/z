@@ -3,43 +3,79 @@
   "type": "module",
   "version": "0.1.0",
   "packageManager": "pnpm@12.4.1",
-  "description": "",
+  "description": "Personal toolkit",
+  "author": "zhzwz",
+  "homepage": "https://github.com/zhzwz/z#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhzwz/z.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zhzwz/z/issues"
+  },
+  "keywords": [
+    "vue",
+    "components",
+    "eslint-config"
+  ],
   "sideEffects": [
     "**/*.css"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
+      "default": "./dist/index.js"
+    },
+    "./eslint-config": {
+      "types": "./dist/eslint-config.d.ts",
+      "default": "./dist/eslint-config.js"
+    },
+    "./style.css": "./dist/style.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm --filter playground dev",
-    "build": "tsdown",
+    "build": "pnpm build:deps && tsdown",
+    "build:deps": "pnpm --filter @zhzwz/eslint-config build",
     "lint": "eslint .",
-    "test": "pnpm -r --if-present test",
-    "typecheck": "tsc -p . && tsc -p tsconfig.node.json && tsc -p playground && pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test && pnpm build && vitest run",
+    "typecheck": "pnpm build:deps && vue-tsc -p . && tsc -p tsconfig.node.json && vue-tsc -p playground && pnpm -r --if-present typecheck",
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
+    "eslint": "^9.10.0 || ^10.0.0",
     "vue": "^3.5.0"
   },
   "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
     "vue": {
       "optional": true
     }
   },
+  "dependencies": {
+    "@zhzwz/eslint-config": "workspace:^"
+  },
   "devDependencies": {
+    "@tsdown/css": "^0.23.4",
     "@types/node": "^26.6.6",
+    "@zhzwz/components": "workspace:*",
     "eslint": "^10.14.0",
     "jiti": "^2.7.0",
     "tsdown": "^0.23.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "unplugin-vue": "^8.0.1",
+    "vitest": "^5.1.0",
+    "vue": "^3.5.0",
+    "vue-tsc": "^3.3.14"
   }
 }
