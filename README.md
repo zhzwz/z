@@ -31,6 +31,12 @@ pnpm lint
 pnpm test        # 包含构建产物的冒烟测试
 ```
 
+## 发布
+
+各包版本独立，只升有改动的包。提交并推送后，为本次升级的每个包推送 tag（`<包目录名>@v<版本>`，根包为 `z`，如 `z@v0.2.0`、`eslint-config@v0.4.0`），`.github/workflows/publish.yaml` 会在同一次运行里按依赖顺序发布所有版本尚未在 npm 上的包。
+
+子包改了代码却没升版本时，发布会被拒绝。
+
 ## Packages
 
 ### [@zhzwz/eslint-config](./packages/eslint-config)

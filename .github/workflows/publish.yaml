@@ -1,0 +1,100 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*@v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+# 同一提交上的多个 tag 会各自触发一次，串行执行，避免并发发布同一版本。
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # 需要读取同一提交上的全部 release tag。
+          fetch-depth: 0
+
+      # 同一提交上有多个 release tag 时，只由排序第一的 tag 执行发布；
+      # 并校验每个 tag（<包目录名>@v<版本>，根包为 z）与对应 package.json 的版本一致。
+      - name: Resolve release
+        id: release
+        run: |
+          TAGS=$(git tag --points-at HEAD --list '*@v*' | sort)
+          LEADER=$(echo "$TAGS" | head -n 1)
+          if [ "$GITHUB_REF_NAME" != "$LEADER" ]; then
+            echo "::notice::${LEADER} on the same commit handles this release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          for TAG in $TAGS; do
+            NAME="${TAG%@v*}"
+            VERSION="${TAG##*@v}"
+            if [ "$NAME" = z ]; then DIR=.; else DIR="packages/${NAME}"; fi
+            ACTUAL=$(jq -r .version "${DIR}/package.json")
+            if [ "$ACTUAL" != "$VERSION" ]; then
+              echo "::error::Tag ${TAG} does not match ${DIR}/package.json version ${ACTUAL}"
+              exit 1
+            fi
+          done
+
+      - if: steps.release.outputs.skip != 'true'
+        uses: pnpm/action-setup@v6
+
+      - if: steps.release.outputs.skip != 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: pnpm
+          registry-url: 'https://registry.npmjs.org'
+
+      - if: steps.release.outputs.skip != 'true'
+        name: Upgrade npm for OIDC trusted publishing
+        run: npm install -g npm@latest
+
+      - if: steps.release.outputs.skip != 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.release.outputs.skip != 'true'
+        run: pnpm typecheck
+      - if: steps.release.outputs.skip != 'true'
+        run: pnpm lint
+      - if: steps.release.outputs.skip != 'true'
+        run: pnpm test
+
+      # pnpm -r publish 会跳过版本已在 npm 上的包。改了代码却没升版本的子包会被跳过，
+      # 依赖它的包随之发布却解析到旧内容，所以已发布版本的内容必须与当前构建一致。
+      - if: steps.release.outputs.skip != 'true'
+        name: Verify already-published packages are unchanged
+        run: |
+          for MANIFEST in packages/*/package.json; do
+            if [ "$(jq -r '.private // false' "$MANIFEST")" = true ]; then continue; fi
+            DIR=$(dirname "$MANIFEST")
+            NAME=$(jq -r .name "$MANIFEST")
+            VERSION=$(jq -r .version "$MANIFEST")
+            if ! npm view "${NAME}@${VERSION}" version > /dev/null 2> "${RUNNER_TEMP}/npm-view.log"; then
+              if grep -q E404 "${RUNNER_TEMP}/npm-view.log"; then
+                echo "${NAME}@${VERSION} will be published."
+                continue
+              fi
+              cat "${RUNNER_TEMP}/npm-view.log"
+              exit 1
+            fi
+            CHANGED=$(npm diff --diff-name-only --diff="${NAME}@${VERSION}" --diff="./${DIR}")
+            if [ -n "$CHANGED" ]; then
+              echo "::error::${NAME} differs from the published ${VERSION}. Bump its version."
+              echo "$CHANGED"
+              exit 1
+            fi
+          done
+
+      # 按依赖顺序发布所有版本尚未在 npm 上的公开包（含根包），并替换 workspace: 协议。
+      - if: steps.release.outputs.skip != 'true'
+        run: pnpm -r publish --access public --no-git-checks --provenance
