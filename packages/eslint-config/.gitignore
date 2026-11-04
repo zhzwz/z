@@ -1,5 +1,0 @@
-.DS_Store
-*.tgz
-*.tsbuildinfo
-dist/
-node_modules/
