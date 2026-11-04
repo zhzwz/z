@@ -1,7 +1,7 @@
 {
   "name": "@zhzwz/eslint-config",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Personal ESLint flat config built on @antfu/eslint-config",
   "author": "zhzwz",
   "homepage": "https://github.com/zhzwz/z/tree/main/packages/eslint-config#readme",
