@@ -4,7 +4,8 @@
 
 默认集成：
 
-- Vue / Astro / UnoCSS
+- Vue / Astro
+- UnoCSS（当前工作目录或其上级目录存在 `uno.config.*` / `unocss.config.*` 时自动启用；monorepo 中配置只在子包里时，需显式传入 `unocss: true`）
 - CSS / HTML / Astro / Markdown
 - **排序**：`.vscode/settings.json`
 - **拼写**：cspell（可选，需传入 `cspellConfigFile`）

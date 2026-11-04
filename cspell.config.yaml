@@ -26,6 +26,8 @@ dictionaryDefinitions:
       - pcss
       # 标签输入组件 Tagify
       - tagify
+      # UnoCSS 加载配置文件所用的库
+      - unconfig
       - unocss
       - vite
       # Vue 拖拽排序组件

@@ -3,7 +3,6 @@ import type { OptionsConfig, TypedFlatConfigItem } from '@antfu/eslint-config'
 export type AntfuBaseConfig = OptionsConfig & Omit<TypedFlatConfigItem, 'files' | 'ignores'>
 
 export const baseConfig = {
-  unocss: true,
   vue: true,
   astro: true,
   rules: {

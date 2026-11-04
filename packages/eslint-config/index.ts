@@ -5,6 +5,7 @@ import { baseConfig } from './configs/base'
 import { createCspellConfig } from './configs/cspell'
 import { GIT_META_FILES, gitattributesConfig, gitignoreConfig } from './configs/git-meta'
 import { stylisticConfig } from './configs/stylistic'
+import { hasUnoConfig } from './configs/unocss'
 import { vscodeSettingsConfig } from './configs/vscode-settings'
 
 export type { EslintConfigZhzwzOptions } from './options'
@@ -13,7 +14,10 @@ export default async function eslintConfigZhzwz(
   options: EslintConfigZhzwzOptions = {},
 ): Promise<TypedFlatConfigItem[]> {
   const composer = antfu(
-    baseConfig,
+    {
+      ...baseConfig,
+      unocss: options.unocss ?? hasUnoConfig(),
+    },
     vscodeSettingsConfig,
     stylisticConfig,
     ...(await createCspellConfig(options)),
