@@ -23,6 +23,7 @@ describe('parseGitattributesLine', () => {
       kind: 'macro-definition',
       macroName: 'binary',
       pattern: '',
+      rawPattern: '',
       attrs: ['-diff', '-merge', '-text'],
     })
   })
@@ -32,6 +33,7 @@ describe('parseGitattributesLine', () => {
       kind: 'macro-definition',
       macroName: 'my-macro',
       pattern: '',
+      rawPattern: '',
       attrs: ['-text'],
     })
   })
@@ -41,6 +43,7 @@ describe('parseGitattributesLine', () => {
       kind: 'rule',
       macroName: '',
       pattern: '[diff]',
+      rawPattern: '[diff]',
       attrs: ['*.c'],
     })
   })

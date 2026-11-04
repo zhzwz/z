@@ -15,6 +15,8 @@ describe('bracket-same-line', () => {
         `const x = { foo: \`bar \${ { a: 1 } }\` }`,
         `const x = { tpl: \`\${\`inner \${[1, 2]}\`}\` }`,
         `const msg = \`value: \${items.map(x => { return x })}\``,
+        'const x = [1, 2, // note\n]\n',
+        'const x = { a: 1 // note\n}\n',
       ],
       invalid: [
         {
@@ -36,6 +38,11 @@ describe('bracket-same-line', () => {
           code: 'const a = { x: 1\n}\nconst b = { y: 2\n}\n',
           errors: [{ messageId: 'lonelyClose' }, { messageId: 'lonelyClose' }],
           output: 'const a = { x: 1}\nconst b = { y: 2}\n',
+        },
+        {
+          code: 'const a = [1,\n]\n// eslint-disable-next-line rule-to-test/bracket-same-line\nconst keep = [2,\n]\n',
+          errors: [{ messageId: 'lonelyClose' }],
+          output: 'const a = [1]\n// eslint-disable-next-line rule-to-test/bracket-same-line\nconst keep = [2,\n]\n',
         },
       ],
     },

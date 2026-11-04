@@ -10,11 +10,14 @@ export interface GitattributesLineParse {
   kind: GitattributesLineKind
   macroName: string
   pattern: string
+  /** pattern 在原文中的写法，包括引号与转义 */
+  rawPattern: string
 }
 
 export interface GitattributesRuleEntry {
   attrs: string[]
   pattern: string
+  rawPattern: string
 }
 
 export interface GitattributesMacroDefinition {
@@ -69,20 +72,7 @@ function skipWhitespace(text: string, start: number): number {
 }
 
 function readAttributeTokens(text: string, start: number): string[] {
-  const attrs: string[] = []
-  let i = skipWhitespace(text, start)
-
-  while (i < text.length) {
-    const field = text[i] === '"'
-      ? readQuotedField(text, i)
-      : readUnquotedField(text, i)
-    if (field.value !== '') {
-      attrs.push(field.value)
-    }
-    i = skipWhitespace(text, field.end)
-  }
-
-  return attrs
+  return text.slice(start).split(/\s+/u).filter(token => token !== '')
 }
 
 export function isGitattributesMacroDefinitionLine(line: string): boolean {
@@ -92,7 +82,7 @@ export function isGitattributesMacroDefinitionLine(line: string): boolean {
 export function parseGitattributesLine(line: string): GitattributesLineParse {
   const text = line.trim()
   if (text === '') {
-    return { kind: 'rule', pattern: '', attrs: [], macroName: '' }
+    return { kind: 'rule', pattern: '', rawPattern: '', attrs: [], macroName: '' }
   }
 
   if (isGitattributesMacroDefinitionLine(text)) {
@@ -105,6 +95,7 @@ export function parseGitattributesLine(line: string): GitattributesLineParse {
       kind: 'macro-definition',
       macroName: nameField.value,
       pattern: '',
+      rawPattern: '',
       attrs: readAttributeTokens(text, nameField.end),
     }
   }
@@ -116,6 +107,7 @@ export function parseGitattributesLine(line: string): GitattributesLineParse {
   return {
     kind: 'rule',
     pattern: patternField.value,
+    rawPattern: text.slice(0, patternField.end),
     attrs: readAttributeTokens(text, patternField.end),
     macroName: '',
   }
@@ -167,7 +159,11 @@ export function gitattributesMacroDefinitionWidth(definition: GitattributesMacro
 }
 
 export function gitattributesRuleEntryWidth(entry: GitattributesRuleEntry): number {
-  return formatGitattributesPattern(entry.pattern).length
+  return entry.rawPattern.length
+}
+
+export function formatGitattributesRuleEntry(entry: GitattributesRuleEntry, columnWidth?: number): string {
+  return formatGitattributesFields(entry.rawPattern, entry.attrs, columnWidth)
 }
 
 export function formatGitattributesRuleLine(
@@ -175,7 +171,14 @@ export function formatGitattributesRuleLine(
   attrs: string[],
   columnWidth?: number,
 ): string {
-  const patternField = formatGitattributesPattern(pattern)
+  return formatGitattributesFields(formatGitattributesPattern(pattern), attrs, columnWidth)
+}
+
+function formatGitattributesFields(
+  patternField: string,
+  attrs: string[],
+  columnWidth?: number,
+): string {
   if (attrs.length === 0) {
     return patternField
   }

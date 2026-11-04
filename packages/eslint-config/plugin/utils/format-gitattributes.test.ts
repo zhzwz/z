@@ -70,6 +70,64 @@ describe('formatGitattributesLines', () => {
     )
   })
 
+  it('keeps the order of overlapping rules that set the same attribute', () => {
+    const input = `assets/** binary
+assets/*.svg text
+`
+    expect(formatGitattributesLines(input, 4)).toBe(
+      `assets/**       binary
+assets/*.svg    text
+`,
+    )
+  })
+
+  it('expands macros defined in the file when checking overlaps', () => {
+    const input = `[attr]generated linguist-generated -diff
+dist/** generated
+dist/*.js diff
+`
+    expect(formatGitattributesLines(input, 4)).toBe(
+      `[attr]generated    linguist-generated -diff
+dist/**            generated
+dist/*.js          diff
+`,
+    )
+  })
+
+  it('still sorts overlapping rules that set different attributes', () => {
+    const input = `docs/** export-ignore
+docs/*.md text
+`
+    expect(formatGitattributesLines(input, 4)).toBe(
+      `docs/*.md    text
+docs/**      export-ignore
+`,
+    )
+  })
+
+  it('keeps escaped patterns verbatim', () => {
+    const input = `\\#notes.txt text
+\\!important.txt text
+path\\ with\\ spaces text
+`
+    expect(formatGitattributesLines(input, 4)).toBe(
+      `\\!important.txt       text
+\\#notes.txt           text
+path\\ with\\ spaces    text
+`,
+    )
+  })
+
+  it('is idempotent when overlapping rules keep their order', () => {
+    const input = `*.png binary
+assets/** binary
+*.md text
+assets/*.svg text
+`
+    const once = formatGitattributesLines(input, 4)
+    expect(formatGitattributesLines(once, 4)).toBe(once)
+  })
+
   it('is idempotent for macro definitions', () => {
     const input = `*.png binary
 [attr]binary -diff -merge -text

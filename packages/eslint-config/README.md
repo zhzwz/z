@@ -34,8 +34,8 @@ export default zhzwz({
 
 通过内置的 `zhzwz` 插件提供，均可自动修复：
 
-| 规则                               | 作用                                                                                        |
-| ---------------------------------- | ------------------------------------------------------------------------------------------- |
-| `zhzwz/gitignore-sort-lines`       | `.gitignore` 按字母顺序排序，注释跟随其下方第一条规则行                                     |
-| `zhzwz/gitattributes-format-lines` | `.gitattributes` 按「类别 → pattern」排序并对齐 pattern 列（列宽 = 最长 pattern + padding） |
-| `zhzwz/bracket-same-line`          | 当 `{}` / `[]` 内容为单行时，禁止闭合括号前换行                                             |
+| 规则                               | 作用                                                                                                                                                            |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `zhzwz/gitignore-sort-lines`       | `.gitignore` 按字母顺序排序，注释跟随其下方第一条规则行；取反规则（`!`）与普通规则之间不交换先后                                                                |
+| `zhzwz/gitattributes-format-lines` | `.gitattributes` 按「类别 → pattern」排序并对齐 pattern 列（列宽 = 最长 pattern + padding）；可能匹配同一文件且设置同一属性的规则保持原有先后，pattern 原样保留 |
+| `zhzwz/bracket-same-line`          | 当 `{}` / `[]` 内容为单行时，禁止闭合括号前换行                                                                                                                 |

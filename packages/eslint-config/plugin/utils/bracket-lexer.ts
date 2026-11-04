@@ -116,6 +116,20 @@ function skipCodeToken(text: string, start: number): number {
   return start
 }
 
+export function containsLineComment(text: string): boolean {
+  let i = 0
+
+  while (i < text.length) {
+    if (text[i] === '/' && text[i + 1] === '/') {
+      return true
+    }
+    const skipped = skipCodeToken(text, i)
+    i = skipped !== i ? skipped : i + 1
+  }
+
+  return false
+}
+
 export function findBracketPairs(text: string): BracketPair[] {
   const stack: Array<{ char: '{' | '[', pos: number }> = []
   const pairs: BracketPair[] = []

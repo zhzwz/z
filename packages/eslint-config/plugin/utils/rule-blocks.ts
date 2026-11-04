@@ -43,17 +43,34 @@ export function collectRuleBlocks<T>(
   return { blocks, trailing: pending }
 }
 
+/**
+ * 稳定排序；`conflicts(a, b)` 为真时，a 原本在 b 之前就必须仍在 b 之前。
+ * 每次选出前面没有冲突块挡住的最小块，结果对自身再排序不变。
+ */
 export function sortRuleBlocks<T>(
   blocks: RuleBlock<T>[],
   compare: (a: RuleBlock<T>, b: RuleBlock<T>) => number,
+  conflicts: (a: RuleBlock<T>, b: RuleBlock<T>) => boolean = () => false,
 ) {
-  return blocks
-    .map((block, index) => ({ block, index }))
-    .sort((a, b) => {
-      const byCompare = compare(a.block, b.block)
-      return byCompare !== 0 ? byCompare : a.index - b.index
-    })
-    .map(item => item.block)
+  const pending = [...blocks]
+  const sorted: RuleBlock<T>[] = []
+
+  while (pending.length > 0) {
+    let pick = 0
+    for (let i = 1; i < pending.length; i++) {
+      const candidate = pending[i]!
+      if (compare(candidate, pending[pick]!) >= 0) {
+        continue
+      }
+      if (pending.slice(0, i).some(earlier => conflicts(earlier, candidate))) {
+        continue
+      }
+      pick = i
+    }
+    sorted.push(...pending.splice(pick, 1))
+  }
+
+  return sorted
 }
 
 export function flattenRuleBlocks<T>(blocks: RuleBlock<T>[], trailing: string[]) {

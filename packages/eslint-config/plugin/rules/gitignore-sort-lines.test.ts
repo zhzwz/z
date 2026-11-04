@@ -10,6 +10,8 @@ describe('gitignore-sort-lines', () => {
       valid: [
         'node_modules/\n',
         '# docs\n\n*.log\n',
+        'dist/*\n!dist/.gitkeep\n',
+        '*.log\n!important.log\n',
       ],
       invalid: [
         {
@@ -21,6 +23,11 @@ describe('gitignore-sort-lines', () => {
           code: '# note\n\n*.tmp\n*.log\n',
           errors: [{ messageId: 'gitignoreUnsorted' }],
           output: '*.log\n# note\n\n*.tmp\n',
+        },
+        {
+          code: 'b\na\n!a/keep\nd\nc\n',
+          errors: [{ messageId: 'gitignoreUnsorted' }],
+          output: 'a\nb\n!a/keep\nc\nd\n',
         },
       ],
     },

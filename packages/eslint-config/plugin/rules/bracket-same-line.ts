@@ -1,6 +1,6 @@
 import type { Rule } from 'eslint'
 import type { BracketPair } from '../utils/bracket-lexer'
-import { findBracketPairs } from '../utils/bracket-lexer'
+import { containsLineComment, findBracketPairs } from '../utils/bracket-lexer'
 
 interface BracketCollapseNode {
   range: [number, number]
@@ -21,7 +21,11 @@ function lonelyCloseBody(inner: string): string | null {
   if (!/^(?:\r\n|\n|\r)[ \t]*$/.test(tail)) {
     return null
   }
-  return inner.slice(0, newlineIndex).replace(/,[ \t]*$/, '')
+  const body = inner.slice(0, newlineIndex)
+  if (containsLineComment(body)) {
+    return null
+  }
+  return body.replace(/,[ \t]*$/, '')
 }
 
 function collapseInnerLonelyBrackets(inner: string): string {
@@ -77,20 +81,6 @@ function findBracketCollapses(text: string): Array<{ range: [number, number], te
   }
 
   return fixes.sort((a, b) => b.range[0] - a.range[0])
-}
-
-function collapseAllLonelyBrackets(text: string): string {
-  let current = text
-
-  while (true) {
-    const fixes = findBracketCollapses(current)
-    if (fixes.length === 0) {
-      return current
-    }
-
-    const fix = fixes[0]!
-    current = current.slice(0, fix.range[0]) + fix.text + current.slice(fix.range[1])
-  }
 }
 
 function isVueFile(filename: string | undefined): boolean {
@@ -159,16 +149,17 @@ function reportBracketCollapses(
     return
   }
 
-  const finalText = collapseAllLonelyBrackets(text)
   const baseOffset = node.range[0]
 
   for (const fix of fixes) {
-    const start = sourceCode.getLocFromIndex(baseOffset + fix.range[0])
-    const end = sourceCode.getLocFromIndex(baseOffset + fix.range[1])
+    const range: [number, number] = [baseOffset + fix.range[0], baseOffset + fix.range[1]]
     context.report({
-      loc: { start, end },
+      loc: {
+        start: sourceCode.getLocFromIndex(range[0]),
+        end: sourceCode.getLocFromIndex(range[1]),
+      },
       messageId: 'lonelyClose',
-      fix: fixer => fixer.replaceText(eslintNode, finalText),
+      fix: fixer => fixer.replaceTextRange(range, fix.text),
     })
   }
 }
