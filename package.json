@@ -23,7 +23,8 @@
     "dev": "pnpm --filter playground dev",
     "build": "tsdown",
     "lint": "eslint .",
-    "typecheck": "tsc -p . && tsc -p playground",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "tsc -p . && tsc -p playground && pnpm -r --if-present typecheck",
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
@@ -35,7 +36,6 @@
     }
   },
   "devDependencies": {
-    "@zhzwz/eslint-config": "^0.1.0",
     "eslint": "^10.14.0",
     "jiti": "^2.7.0",
     "tsdown": "^0.23.4",

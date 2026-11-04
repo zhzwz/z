@@ -1,0 +1,12 @@
+ignorePaths:
+  - .git
+  - dist
+  - node_modules
+  - package.json
+
+ignoreWords:
+  - zhzwz
+
+words:
+  - pcss
+  - unocss
