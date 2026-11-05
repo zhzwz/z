@@ -1,0 +1,66 @@
+# 文档站
+
+用 Astro 搭的组件文档，`pnpm dev` 启动，端口 11105。改组件后文档实时更新，演示代码按包名引入但指向仓库源码，不必先构建。
+
+## 目录
+
+```
+src/
+  content/docs/     文档页面（MDX），决定路由与侧边栏
+  demos/            演示用的 Vue 组件，一个示例一个文件
+  components/       Demo、ApiTable 等文档站的 Astro 组件
+  layouts/          页面布局
+  meta.ts           读组件源码生成接口表、按组件身份查找示例源码
+  nav.ts            由文档页面生成侧边栏
+```
+
+## 新增一个组件的文档
+
+1. 在 `src/demos/<组件目录名>/` 下按示例各写一个 `.vue`，文件第一行的 HTML 注释作为示例标题：
+
+   ```vue
+   <!-- 主题色与朴素按钮 -->
+   <script setup lang="ts">
+   import { ZnButton } from '@zhzwz/z/components/zn-button'
+   </script>
+
+   <template>
+     <div class="row">
+       <ZnButton type="primary">主要</ZnButton>
+     </div>
+   </template>
+   ```
+
+   布局辅助类（`.row`、`.icons`）在 `src/styles/demo.css` 里。
+
+2. 在 `src/content/docs/components/` 下新建 `<组件目录名>.mdx`：
+
+   ```mdx
+   ---
+   title: ZnButton
+   description: 对 naive-ui 按钮的二次封装。
+   order: 3
+   ---
+
+   import ApiTable from '@/components/ApiTable.astro'
+   import Demo from '@/components/Demo.astro'
+   import Types from '@/demos/zn-button/types.vue'
+
+   <Demo of={Types}>
+     <Types client:visible />
+   </Demo>
+
+   ## 接口
+
+   <ApiTable name="ZnButton" />
+   ```
+
+   页面文件的位置和 `order` 决定侧边栏的顺序，不需要另外维护导航。
+
+## 约定
+
+- 示例必须写成独立的 `.vue` 文件并静态引入。Astro 的 `client:*` 只认静态导入，用变量或动态组件传进去会在构建时报 `NoMatchingImport`。
+- `<Demo of={X}>` 的 `of` 和插槽里用的必须是同一个组件，`Demo` 靠组件身份找源码，写错会直接抛错。
+- `ApiTable` 的接口表由 `vue-component-meta` 从组件源码读出，只列组件自己声明的 props：从 naive-ui 继承的不列，请链到依赖的文档。注释写在 props 的 JSDoc 里就会出现在说明列，反引号会渲染成行内代码。
+- 新增页面目录时，在 `src/nav.ts` 的 `sectionTitles` 里登记分组标题。
+- 完成改动后运行 `pnpm typecheck`、`pnpm lint`、`pnpm test`。

@@ -1,16 +1,12 @@
 {
+  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "target": "ES2024",
-    "lib": ["ES2024", "DOM"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "strict": true,
-    "noEmit": true,
-    "verbatimModuleSyntax": true,
-    "erasableSyntaxOnly": true,
-    "skipLibCheck": true
+    "paths": {
+      "@/*": ["./src/*"],
+      "@zhzwz/z": ["../index.ts"],
+      "@zhzwz/z/*": ["../*"]
+    }
   },
-  "include": ["main.ts", "App.vue"]
+  "include": [".astro/types.d.ts", "src/**/*", "astro.config.ts"],
+  "exclude": ["dist"]
 }

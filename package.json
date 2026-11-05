@@ -57,7 +57,7 @@
     "build:deps": "pnpm --filter @zhzwz/eslint-config build",
     "lint": "eslint .",
     "test": "pnpm -r --if-present test && pnpm build && vitest run",
-    "typecheck": "pnpm build:deps && vue-tsc -p . && tsc -p tsconfig.node.json && vue-tsc -p playground && pnpm -r --if-present typecheck",
+    "typecheck": "pnpm build:deps && vue-tsc -p . && tsc -p tsconfig.node.json && pnpm -r --if-present typecheck",
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
@@ -97,6 +97,8 @@
     "happy-dom": "^21.0.4",
     "jiti": "^2.7.0",
     "naive-ui": "^2.45.3",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.2",
     "tsdown": "^0.23.4",
     "typescript": "^6.0.3",
     "unplugin-vue": "^8.0.1",

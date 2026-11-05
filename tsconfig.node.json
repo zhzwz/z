@@ -12,7 +12,6 @@
   "include": [
     "tsdown.config.ts",
     "eslint.config.ts",
-    "playground/vite.config.ts",
     "vitest.config.ts",
     "test/**/*.ts",
     "packages/eslint-config/env.d.ts"

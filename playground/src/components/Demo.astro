@@ -1,0 +1,77 @@
+---
+import { Code } from 'astro:components'
+import type { Component } from 'vue'
+import { demoSource } from '../meta.ts'
+
+interface Props {
+  /** 演示的 Vue 组件。用 prop 传入而不是插槽，才能按组件身份找到对应源码。 */
+  of: Component
+}
+
+const { of: Demo } = Astro.props
+
+const source = demoSource(Demo)
+if (!source) {
+  throw new Error(`没有找到演示组件的源码，请确认它位于 src/demos/ 下：${String(Demo)}`)
+}
+
+// 示例文件顶部的 HTML 注释用作标题，不必在页面里重复写。
+const title = /^<!--\s*(.+?)\s*-->/.exec(source)?.[1]
+const code = source.replace(/^<!--.*?-->\s*/, '').trim()
+---
+
+<section class="demo">
+  {title && <h3 class="demo__title">{title}</h3>}
+
+  <div class="demo__preview">
+    <slot />
+  </div>
+
+  <details class="demo__source">
+    <summary>查看源码</summary>
+    <Code code={code} lang="vue" themes={{ dark: 'github-dark', light: 'github-light' }} />
+  </details>
+</section>
+
+<style>
+  .demo {
+    margin: 20px 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .demo__title {
+    margin: 0;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-soft);
+    font-size: 0.9375rem;
+  }
+
+  .demo__preview {
+    padding: 24px 16px;
+  }
+
+  .demo__source {
+    border-top: 1px solid var(--border);
+  }
+
+  .demo__source summary {
+    padding: 8px 16px;
+    color: var(--text-soft);
+    cursor: pointer;
+    font-size: 0.8125rem;
+    user-select: none;
+  }
+
+  .demo__source summary:hover {
+    color: var(--text);
+  }
+
+  .demo__source :global(pre) {
+    border: 0;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+  }
+</style>

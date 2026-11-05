@@ -1,0 +1,45 @@
+---
+title: 开始
+description: 组件按需引入，每个组件只依赖自己用到的库。
+order: 1
+---
+
+推荐配合 [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) 使用，模板里直接写组件名，组件与样式自动按需引入：
+
+```ts
+import { ZResolver } from '@zhzwz/z/resolver'
+import Components from 'unplugin-vue-components/vite'
+
+export default defineConfig({
+  plugins: [
+    Components({
+      resolvers: [
+        ZResolver()
+      ],
+    }),
+  ],
+})
+```
+
+自行引入样式时传 `ZResolver({ importStyle: false })`。
+
+也可以手动导入。每个组件是单独的入口，没有汇总导出所有组件的入口：
+
+```ts
+import { ZButton } from '@zhzwz/z/components/z-button'
+import '@zhzwz/z/style.css'
+```
+
+## 组件一览
+
+| 组件       | 说明                                 | 需要安装的依赖                    |
+| ---------- | ------------------------------------ | --------------------------------- |
+| `ZButton`  | 基础的按钮                           | `vue`                             |
+| `ZIcon`    | 图标，支持 iconify 名称、数据与组件  | `vue`、`@iconify/vue`             |
+| `ZnButton` | 对 naive-ui 按钮的封装               | `vue`、`naive-ui`、`@iconify/vue` |
+
+`Zn*` 组件是对 [naive-ui](https://www.naiveui.com) 的二次封装，props 与插槽和 naive 保持一致。
+
+## 关于这个文档站
+
+左侧导航由 `src/content/docs/` 下的文件生成，新增一个页面就会出现在导航里。组件页里的示例是 `src/demos/` 下独立的 `.vue` 文件，页面直接引用它，并把源码显示在示例下方。

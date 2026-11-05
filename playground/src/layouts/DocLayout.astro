@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content'
+import { navSections } from '../nav.ts'
+import { version } from '@zhzwz/z'
+import '../styles/global.css'
+import '../styles/demo.css'
+
+interface Props {
+  description?: string
+  title: string
+}
+
+const { description, title } = Astro.props
+const sections = navSections(await getCollection('docs'))
+const current = Astro.url.pathname
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · @zhzwz/z</title>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <a class="sidebar__brand" href="/">
+          @zhzwz/z
+          <span class="sidebar__version">v{version}</span>
+        </a>
+
+        {sections.map((section) => (
+          <nav class="sidebar__section">
+            <p class="sidebar__title">{section.title}</p>
+            <ul class="sidebar__list">
+              {section.items.map((item) => (
+                <li>
+                  <a
+                    class:list={['sidebar__link', { 'sidebar__link--active': item.href === current }]}
+                    href={item.href}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </aside>
+
+      <main class="content">
+        <h1>{title}</h1>
+        {description && <p class="lead">{description}</p>}
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>

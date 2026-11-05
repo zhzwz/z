@@ -1,0 +1,100 @@
+---
+import { componentMeta, eventRows, ownProps, propRows, slotRows } from '../meta.ts'
+
+interface Props {
+  /** 组件名，如 `ZButton` */
+  name: string
+}
+
+const { name } = Astro.props
+
+const meta = componentMeta(name)
+const props = meta ? propRows(ownProps(name, meta.props)) : []
+const events = meta ? eventRows(meta.events) : []
+const slots = meta ? slotRows(meta.slots) : []
+---
+
+{meta === undefined && (
+  <p class="api__missing">
+    未能读取 <code>{name}</code> 的类型，接口表暂缺。
+  </p>
+)}
+
+{props.length > 0 && (
+  <table>
+    <thead>
+      <tr>
+        <th>属性</th>
+        <th>类型</th>
+        <th>默认值</th>
+        <th>说明</th>
+      </tr>
+    </thead>
+    <tbody>
+      {props.map((prop) => (
+        <tr>
+          <td>
+            <code>{prop.name}</code>
+          </td>
+          <td>
+            <code>{prop.type}</code>
+          </td>
+          <td>{prop.default ? <code>{prop.default}</code> : '—'}</td>
+          <td set:html={`${prop.required ? '<strong>必填。</strong>' : ''}${prop.description}`} />
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+
+{events.length > 0 && (
+  <>
+    <h3>事件</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>事件</th>
+          <th>参数</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        {events.map((event) => (
+          <tr>
+            <td>
+              <code>{event.name}</code>
+            </td>
+            <td>
+              <code>{event.signature}</code>
+            </td>
+            <td set:html={event.description} />
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </>
+)}
+
+{slots.length > 0 && (
+  <>
+    <h3>插槽</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>插槽</th>
+          <th>说明</th>
+        </tr>
+      </thead>
+      <tbody>
+        {slots.map((slot) => (
+          <tr>
+            <td>
+              <code>{slot.name}</code>
+            </td>
+            <td set:html={slot.description} />
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </>
+)}

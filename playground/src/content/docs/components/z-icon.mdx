@@ -1,0 +1,51 @@
+---
+title: ZIcon
+description: 图标，支持 iconify 名称、图标数据与图标组件三种传法。
+order: 2
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Names from '@/demos/z-icon/names.vue'
+import Data from '@/demos/z-icon/data.vue'
+import Component from '@/demos/z-icon/component.vue'
+
+`icon` 接受三种值，按顺序识别：
+
+1. **字符串**：iconify 图标名，如 `ic:round-add`，运行时从 `api.iconify.design` 加载。
+2. **图标数据**：iconify 的 `IconifyIcon` 对象，自带图形，不联网。
+3. **图标组件**：任何 Vue 组件，如 `unplugin-icons` 生成的结果。
+
+值为空时不渲染。
+
+## 按名称
+
+<Demo of={Names}>
+  <Names client:visible />
+</Demo>
+
+无法访问外网时，用 `@iconify/vue` 的 `addCollection` 预先注册图标集，之后按名字使用即可。
+
+## 图标数据
+
+<Demo of={Data}>
+  <Data client:visible />
+</Demo>
+
+## 图标组件
+
+<Demo of={Component}>
+  <Component client:visible />
+</Demo>
+
+## 无障碍
+
+图标默认是装饰性的，读屏软件会跳过。单独表达含义时传 `aria-label`，组件会作为图片读出：
+
+```vue
+<ZIcon icon="ic:round-favorite" aria-label="已收藏" />
+```
+
+## 接口
+
+<ApiTable name="ZIcon" />

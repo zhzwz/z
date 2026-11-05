@@ -1,0 +1,55 @@
+---
+title: ZnButton
+description: 对 naive-ui 按钮的二次封装，props 与插槽全部透传。
+order: 3
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Types from '@/demos/zn-button/types.vue'
+import Size from '@/demos/zn-button/size.vue'
+import Loading from '@/demos/zn-button/loading.vue'
+import Icon from '@/demos/zn-button/icon.vue'
+import Slots from '@/demos/zn-button/slots.vue'
+
+除 naive-ui 的 [全部 props](https://www.naiveui.com/zh-CN/os-theme/components/button#Button-Props) 外，额外提供 `icon` 与 `label` 两个属性，分别对应图标和文字。
+
+## 类型
+
+<Demo of={Types}>
+  <Types client:visible />
+</Demo>
+
+## 尺寸与形状
+
+<Demo of={Size}>
+  <Size client:visible />
+</Demo>
+
+## 加载状态
+
+<Demo of={Loading}>
+  <Loading client:visible />
+</Demo>
+
+## 带图标
+
+只有图标、没有文字的按钮必须提供 `aria-label`、`aria-labelledby` 或 `title`，否则开发环境会警告。这类按钮会自动收成正方形。
+
+<Demo of={Icon}>
+  <Icon client:visible />
+</Demo>
+
+## 插槽
+
+props 和插槽提供同样的内容时插槽优先：`#icon` 优先于 `icon`，默认插槽优先于 `label`。
+
+<Demo of={Slots}>
+  <Slots client:visible />
+</Demo>
+
+## 接口
+
+以下只列额外新增的属性，naive-ui 的 props 请查阅其文档。
+
+<ApiTable name="ZnButton" />

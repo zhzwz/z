@@ -1,0 +1,21 @@
+/* 示例组件渲染在演示卡片的插槽里，作用域样式覆盖不到，布局辅助类放在这里。 */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.row + .row,
+form.row + .row {
+  margin-top: 16px;
+}
+
+.icons {
+  font-size: 24px;
+}
+
+.stack {
+  display: grid;
+  gap: 8px;
+}

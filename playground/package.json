@@ -3,15 +3,21 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite --port 11105",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "astro dev --port 11105",
+    "build": "astro build",
+    "preview": "astro preview --port 11105",
+    "typecheck": "astro check && vue-tsc -p tsconfig.vue.json"
   },
   "dependencies": {
+    "@astrojs/mdx": "^8.1.2",
+    "@astrojs/vue": "^7.1.2",
+    "astro": "^7.4.5",
     "vue": "^3.5.44"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^6.0.10",
-    "vite": "^8.3.5"
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^6.0.3",
+    "vue-component-meta": "^3.3.14",
+    "vue-tsc": "^3.3.14"
   }
 }
