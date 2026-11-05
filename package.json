@@ -16,6 +16,7 @@
   "keywords": [
     "vue",
     "components",
+    "naive-ui",
     "eslint-config"
   ],
   "sideEffects": [
@@ -26,9 +27,17 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./components/*": {
+      "types": "./dist/components/*/index.d.ts",
+      "default": "./dist/components/*/index.js"
+    },
     "./eslint-config": {
       "types": "./dist/eslint-config.d.ts",
       "default": "./dist/eslint-config.js"
+    },
+    "./resolver": {
+      "types": "./dist/resolver.d.ts",
+      "default": "./dist/resolver.js"
     },
     "./style.css": "./dist/style.css",
     "./package.json": "./package.json"
@@ -43,6 +52,7 @@
     "node": ">=24"
   },
   "scripts": {
+    "dev": "pnpm --filter playground dev",
     "build": "pnpm build:deps && tsdown",
     "build:deps": "pnpm --filter @zhzwz/eslint-config build",
     "lint": "eslint .",
@@ -51,11 +61,23 @@
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
+    "@iconify/vue": "^5.0.0",
     "eslint": "^9.10.0 || ^10.0.0",
+    "naive-ui": "^2.45.0",
+    "unplugin-vue-components": "^32.0.0",
     "vue": "^3.5.0"
   },
   "peerDependenciesMeta": {
+    "@iconify/vue": {
+      "optional": true
+    },
     "eslint": {
+      "optional": true
+    },
+    "naive-ui": {
+      "optional": true
+    },
+    "unplugin-vue-components": {
       "optional": true
     },
     "vue": {
@@ -66,14 +88,19 @@
     "@zhzwz/eslint-config": "workspace:^"
   },
   "devDependencies": {
+    "@iconify/vue": "^5.0.5",
     "@tsdown/css": "^0.23.4",
     "@types/node": "^26.6.6",
-    "@zhzwz/components": "workspace:*",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.5.1",
     "eslint": "^10.14.0",
+    "happy-dom": "^21.0.4",
     "jiti": "^2.7.0",
+    "naive-ui": "^2.45.3",
     "tsdown": "^0.23.4",
     "typescript": "^6.0.3",
     "unplugin-vue": "^8.0.1",
+    "unplugin-vue-components": "^32.1.0",
     "vitest": "^5.1.0",
     "vue": "^3.5.0",
     "vue-tsc": "^3.3.14"

@@ -1,4 +1,8 @@
-import { readFileSync } from 'node:fs'
+import { execFile } from 'node:child_process'
+import { readdirSync, readFileSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import { fileURLToPath } from 'node:url'
+import { promisify } from 'node:util'
 import { describe, expect, it } from 'vitest'
 import pkg from '../package.json' with { type: 'json' }
 
@@ -6,27 +10,125 @@ const distUrl = (fileName: string) => new URL(`../dist/${fileName}`, import.meta
 const readDist = (fileName: string) => readFileSync(distUrl(fileName), 'utf8')
 const importDist = (fileName: string) => import(distUrl(fileName).href)
 
-describe('dist', () => {
-  it('exports components and version from the main entry', async () => {
-    const entry = await importDist('index.js')
-    expect(entry.version).toBe(pkg.version)
-    expect(entry.ZButton).toMatchObject({ __name: 'ZButton' })
-  })
+// 每个组件允许依赖的外部包，也是 README 中"需要安装的依赖"的依据。
+const componentDependencies: Record<string, string[]> = {
+  'z-button': ['vue'],
+  'z-icon': ['@iconify/vue', 'vue'],
+  'zn-button': ['@iconify/vue', 'naive-ui', 'vue'],
+}
 
-  it('ships component types', () => {
-    const types = readDist('index.d.ts')
-    expect(types).toMatch(/export \{.*ZButton.*\}/)
-    expect(types).toContain('ZButtonProps')
-  })
+const componentDirs = readdirSync(distUrl('components/'), { withFileTypes: true })
+  .filter(entry => entry.isDirectory())
+  .map(entry => entry.name)
 
-  it('does not leak the private components package', () => {
-    for (const fileName of ['index.js', 'index.d.ts']) {
-      expect(readDist(fileName)).not.toContain('@zhzwz/components')
+const toComponentName = (dir: string) => dir.replace(/(?:^|-)([a-z])/g, (_, char: string) => char.toUpperCase())
+
+function packageName(specifier: string) {
+  const [scopeOrName, name] = specifier.split('/')
+  return scopeOrName!.startsWith('@')
+    ? `${scopeOrName}/${name}`
+    : scopeOrName!
+}
+
+function collectExternalImports(url: URL, seen = new Set<string>(), externals = new Set<string>()) {
+  if (seen.has(url.href)) {
+    return externals
+  }
+  seen.add(url.href)
+  const code = readFileSync(url, 'utf8')
+  for (const [, specifier] of code.matchAll(/(?:from|import)\s*"([^"]+)"/g)) {
+    if (specifier!.startsWith('.')) {
+      collectExternalImports(new URL(specifier!, url), seen, externals)
+    } else {
+      externals.add(packageName(specifier!))
     }
+  }
+  return externals
+}
+
+describe('dist', () => {
+  it('exports only the version from the main entry', async () => {
+    const entry = await importDist('index.js')
+    expect(Object.keys(entry)).toEqual(['version'])
+    expect(entry.version).toBe(pkg.version)
+  })
+
+  it('lists the dependencies of every built component', () => {
+    expect(componentDirs.toSorted()).toEqual(Object.keys(componentDependencies).toSorted())
+  })
+
+  describe.each(componentDirs)('components/%s', (dir) => {
+    const name = toComponentName(dir)
+
+    it('is importable through the package exports', async () => {
+      const entry = await import(`@zhzwz/z/components/${dir}`)
+      expect(entry[name]).toMatchObject({ __name: name })
+    })
+
+    it('ships types', () => {
+      const types = readDist(`components/${dir}/index.d.ts`)
+      expect(types).toContain(name)
+      expect(types).toContain(`${name}Props`)
+    })
+
+    it('imports only its declared dependencies', () => {
+      const externals = collectExternalImports(distUrl(`components/${dir}/index.js`))
+      expect([...externals].toSorted()).toEqual(componentDependencies[dir])
+    })
+
+    it('is resolved by ZResolver', async () => {
+      const { ZResolver } = await importDist('resolver.js')
+      expect(ZResolver().resolve(name)).toEqual({
+        name,
+        from: `@zhzwz/z/components/${dir}`,
+        sideEffects: '@zhzwz/z/style.css',
+      })
+    })
+  })
+
+  it('leaves unknown components and styles to the caller', async () => {
+    const { ZResolver } = await importDist('resolver.js')
+    expect(ZResolver().resolve('ZUnknown')).toBeUndefined()
+    expect(ZResolver().resolve('NButton')).toBeUndefined()
+    expect(ZResolver({ importStyle: false }).resolve('ZnButton')).toMatchObject({ sideEffects: undefined })
   })
 
   it('emits component styles', () => {
-    expect(readDist('style.css')).toContain('.z-button')
+    const css = readDist('style.css')
+    for (const className of ['.z-button', '.z-icon', '.zn-button--icon-only']) {
+      expect(css).toContain(className)
+    }
+  })
+
+  describe('types for consumers', () => {
+    const consumerUrl = new URL('consumer/', import.meta.url)
+
+    it('covers every component', () => {
+      const consumer = readFileSync(new URL('index.ts', consumerUrl), 'utf8')
+      for (const dir of componentDirs) {
+        expect(consumer).toContain(`'@zhzwz/z/components/${dir}'`)
+      }
+    })
+
+    // 不开 skipLibCheck，声明文件里引用的每个类型都要能解析。
+    it.each([
+      ['nodenext', 'nodenext'],
+      ['esnext', 'bundler'],
+    ])('type-checks with module %s and moduleResolution %s', async (module, moduleResolution) => {
+      const tsc = createRequire(import.meta.url).resolve('typescript/bin/tsc')
+      const args = [
+        tsc,
+        '-p',
+        fileURLToPath(consumerUrl),
+        '--module',
+        module,
+        '--moduleResolution',
+        moduleResolution,
+      ]
+      const errors = await promisify(execFile)(process.execPath, args)
+        .then(() => '', (error: { stdout: string }) => error.stdout)
+      expect(errors).toBe('')
+    }, 30_000)
   })
 
   it('re-exports @zhzwz/eslint-config from the subpath', async () => {

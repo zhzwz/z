@@ -84,5 +84,7 @@ ignoreWords:
 words:
   # 去重，pnpm dedupe
   - dedupe
+  # ARIA 属性 aria-labelledby
+  - labelledby
   # Vue 的虚拟节点 VNode
   - vnode
