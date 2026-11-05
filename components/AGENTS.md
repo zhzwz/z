@@ -58,4 +58,5 @@
 - 根目录 `test/` 是构建产物的冒烟测试，`pnpm test` 会先构建再运行。
 - `test/consumer/` 以使用方身份，分别用 `moduleResolution: nodenext` 和 `bundler`、不开 `skipLibCheck` 检查产物的类型。新增组件后要在这里导入。仓库自身的 `pnpm typecheck` 开了 `skipLibCheck`，发现不了声明文件的问题。
 - 声明文件里推断出的类型可能引用依赖的内部路径（如 `naive-ui/es/_utils`），`tsdown.config.ts` 会在构建时把这类深层导入补全到具体文件。
+- 新增组件后同步补 `playground/` 的文档与演示，写法见 [`playground/AGENTS.md`](../playground/AGENTS.md)。
 - 完成改动后运行 `pnpm typecheck`、`pnpm lint`、`pnpm test`。

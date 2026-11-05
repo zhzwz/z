@@ -77,11 +77,13 @@ export default zhzwz()
 ## 开发
 
 ```bash
-pnpm dev         # 启动演示页面
+pnpm dev         # 启动文档站，演示各组件的用法
 pnpm typecheck
 pnpm lint
 pnpm test        # 包含构建产物的冒烟测试
 ```
+
+组件文档在 `playground/`，用 Astro 生成，开发约定见 [`playground/AGENTS.md`](./playground/AGENTS.md)。
 
 ## 发布
 
