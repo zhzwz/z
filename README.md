@@ -7,9 +7,61 @@ pnpm add -D @zhzwz/eslint-config
 
 ## Vue 组件
 
+推荐配合 [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) 使用，在模板中直接写组件名，组件与样式自动按需引入：
+
 ```ts
-import { ZButton } from '@zhzwz/z'
+import { ZResolver } from '@zhzwz/z/resolver'
+import Components from 'unplugin-vue-components/vite'
+
+export default defineConfig({
+  plugins: [
+    Components({
+      resolvers: [
+        ZResolver()
+      ],
+    }),
+  ],
+})
+```
+
+自行引入样式时，传 `ZResolver({ importStyle: false })`。
+
+也可以手动导入。每个组件是单独的入口，没有汇总导出所有组件的入口：
+
+```ts
+import { ZButton } from '@zhzwz/z/components/z-button'
+import { ZnButton } from '@zhzwz/z/components/zn-button'
 import '@zhzwz/z/style.css'
+```
+
+每个组件只依赖下表中的库，只需安装所用组件的依赖。`Zn*` 组件是对 [naive-ui](https://www.naiveui.com) 的二次封装。
+
+| 组件       | 需要安装的依赖                    |
+| ---------- | --------------------------------- |
+| `ZButton`  | `vue`                             |
+| `ZIcon`    | `vue`、`@iconify/vue`             |
+| `ZnButton` | `vue`、`naive-ui`、`@iconify/vue` |
+
+### 图标
+
+`ZIcon` 和 `ZnButton` 的 `icon` 接受三种值：
+
+```vue
+<ZIcon icon="ic:round-add" />          <!-- iconify 图标名，运行时从 api.iconify.design 加载 -->
+
+<ZIcon :icon="roundAdd" />             <!-- iconify 图标数据，不联网 -->
+
+<ZIcon :icon="IconAdd" />              <!-- 图标组件，如 unplugin-icons 生成的组件 -->
+```
+
+无法访问外网时，用 `@iconify/vue` 的 `addCollection` 预先注册图标集，之后按名字使用即可。`icon` 为空时不渲染。
+
+图标默认是装饰性的，读屏软件会跳过；单独表达含义的图标需要 `aria-label`。只有图标、没有文字的按钮必须提供 `aria-label`、`aria-labelledby` 或 `title`，否则开发环境会给出警告：
+
+```vue
+<ZnButton icon="ic:round-search" aria-label="搜索" />
+
+<ZIcon icon="ic:round-favorite" aria-label="已收藏" />
 ```
 
 ## ESLint 配置
@@ -25,7 +77,7 @@ export default zhzwz()
 ## 开发
 
 ```bash
-pnpm playground  # 启动演示页面
+pnpm dev         # 启动演示页面
 pnpm typecheck
 pnpm lint
 pnpm test        # 包含构建产物的冒烟测试
