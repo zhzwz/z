@@ -1,5 +1,6 @@
+/* 默认浅色。深色令牌写在两处：显式选中深色，以及跟随系统且系统是深色。 */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --bg: #fff;
   --bg-soft: #f6f8fa;
   --border: #d8dee4;
@@ -12,7 +13,8 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root[data-theme-choice='auto'] {
+    color-scheme: dark;
     --bg: #0d1117;
     --bg-soft: #161b22;
     --border: #30363d;
@@ -21,6 +23,17 @@
     --accent: #4493f8;
     --code-bg: #161b22;
   }
+}
+
+:root[data-theme-choice='dark'] {
+  color-scheme: dark;
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-soft: #9198a1;
+  --accent: #4493f8;
+  --code-bg: #161b22;
 }
 
 * {
@@ -58,24 +71,60 @@ code {
 
 pre {
   margin: 0;
+  padding: 16px 18px;
   overflow-x: auto;
   border: 1px solid var(--border);
   border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.7;
 }
 
 pre code {
   padding: 0;
+  border: 0;
   background: none;
-  font-size: 0.8125rem;
+  font-size: inherit;
 }
 
-/* 代码块用 shiki 的双主题输出，按系统的深浅色切换。 */
+/* shiki 的双主题输出把两套颜色都写在标签上，这里按当前主题挑一套。 */
+.astro-code {
+  background-color: var(--code-bg) !important;
+}
+
 @media (prefers-color-scheme: dark) {
-  .astro-code,
-  .astro-code span {
+  :root[data-theme-choice='auto'] .astro-code,
+  :root[data-theme-choice='auto'] .astro-code span {
     background-color: var(--shiki-dark-bg) !important;
     color: var(--shiki-dark) !important;
   }
+}
+
+:root[data-theme-choice='dark'] .astro-code,
+:root[data-theme-choice='dark'] .astro-code span {
+  background-color: var(--shiki-dark-bg) !important;
+  color: var(--shiki-dark) !important;
+}
+
+/* 行号由 CSS 计数器生成，不进入代码内容，复制和读屏都不会带上。 */
+.astro-code code {
+  counter-reset: line;
+}
+
+.astro-code .line {
+  counter-increment: line;
+}
+
+.astro-code .line::before {
+  display: inline-block;
+  width: 2ch;
+  margin-right: 1.5ch;
+  padding-right: 1ch;
+  border-right: 1px solid var(--border);
+  color: var(--text-soft);
+  content: counter(line);
+  opacity: 0.6;
+  text-align: right;
+  user-select: none;
 }
 
 table {
@@ -119,7 +168,7 @@ th {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   color: var(--text);
   font-size: 1.0625rem;
   font-weight: 600;

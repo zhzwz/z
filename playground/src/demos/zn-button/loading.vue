@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { ZnButton } from '@zhzwz/z/components/zn-button'
 import { ref } from 'vue'
+import NaiveTheme from '@/components/NaiveTheme.vue'
 
 const loading = ref(false)
 
@@ -14,12 +15,14 @@ function start() {
 </script>
 
 <template>
-  <div class="row">
-    <ZnButton :loading="loading" type="primary" @click="start">
-      加载 1 秒
-    </ZnButton>
-    <ZnButton loading type="primary">
-      一直加载
-    </ZnButton>
-  </div>
+  <NaiveTheme>
+    <div class="row">
+      <ZnButton :loading="loading" type="primary" @click="start">
+        加载 1 秒
+      </ZnButton>
+      <ZnButton loading type="primary">
+        一直加载
+      </ZnButton>
+    </div>
+  </NaiveTheme>
 </template>

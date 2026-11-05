@@ -33,6 +33,20 @@ src/
 
    布局辅助类（`.row`、`.icons`）在 `src/styles/demo.css` 里。
 
+演示里如果用 naive-ui 的组件（`Zn*` 也算），要用 `NaiveTheme` 包一层，否则 naive-ui 不跟随站点的深浅色：
+
+```vue
+<script setup lang="ts">
+import NaiveTheme from '@/components/NaiveTheme.vue'
+</script>
+
+<template>
+  <NaiveTheme>
+    <div class="row">...</div>
+  </NaiveTheme>
+</template>
+```
+
 2. 在 `src/content/docs/components/` 下新建 `<组件目录名>.mdx`：
 
    ```mdx
@@ -59,6 +73,8 @@ src/
 
 ## 约定
 
+- 主题默认跟随系统，`src/theme.ts` 统一管：选择存在 `localStorage.theme`，结果写到 `<html data-theme-choice>`，深浅两套 CSS 变量据此切换。新增样式用 `var(--*)`，不要写死颜色。
+- 代码块的行号由 `global.css` 里的计数器生成，不进代码内容，复制不会带上。
 - 示例必须写成独立的 `.vue` 文件并静态引入。Astro 的 `client:*` 只认静态导入，用变量或动态组件传进去会在构建时报 `NoMatchingImport`。
 - `<Demo of={X}>` 的 `of` 和插槽里用的必须是同一个组件，`Demo` 靠组件身份找源码，写错会直接抛错。
 - `ApiTable` 的接口表由 `vue-component-meta` 从组件源码读出，只列组件自己声明的 props：从 naive-ui 继承的不列，请链到依赖的文档。注释写在 props 的 JSDoc 里就会出现在说明列，反引号会渲染成行内代码。

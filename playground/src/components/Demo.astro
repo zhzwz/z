@@ -65,13 +65,17 @@ const code = source.replace(/^<!--.*?-->\s*/, '').trim()
     user-select: none;
   }
 
+  .demo__source[open] summary {
+    border-bottom: 1px solid var(--border);
+  }
+
   .demo__source summary:hover {
     color: var(--text);
   }
 
+  /* 代码块自己不带边框，贴在卡片里时只留上边分隔线。 */
   .demo__source :global(pre) {
     border: 0;
-    border-top: 1px solid var(--border);
     border-radius: 0;
   }
 </style>
