@@ -1,9 +1,9 @@
 ---
+import Brand from '../components/Brand.astro'
 import ThemeSwitch from '../components/ThemeSwitch.astro'
 import { getCollection } from 'astro:content'
 import { navSections } from '../nav.ts'
 import { initScript } from '../theme.ts'
-import { version } from '@zhzwz/z'
 import '../styles/global.css'
 import '../styles/demo.css'
 
@@ -23,16 +23,14 @@ const current = Astro.url.pathname
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <title>{title} · @zhzwz/z</title>
     <script is:inline set:html={initScript} />
   </head>
   <body>
     <div class="layout">
       <aside class="sidebar">
-        <a class="sidebar__brand" href="/">
-          @zhzwz/z
-          <span class="sidebar__version">v{version}</span>
-        </a>
+        <Brand />
 
         <ThemeSwitch />
 

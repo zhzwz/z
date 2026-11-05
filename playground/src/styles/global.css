@@ -163,22 +163,6 @@ th {
   overflow-y: auto;
 }
 
-.sidebar__brand {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin-bottom: 20px;
-  color: var(--text);
-  font-size: 1.0625rem;
-  font-weight: 600;
-}
-
-.sidebar__version {
-  color: var(--text-soft);
-  font-size: 0.8125rem;
-  font-weight: 400;
-}
-
 .sidebar__section + .sidebar__section {
   margin-top: 24px;
 }

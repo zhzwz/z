@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    字标的唯一源头，改这里即可。
+
+    /favicon.svg 由 src/pages/favicon.svg.ts 输出，会去掉注释与多余空白。
+    页面内的图标由 src/components/Favicon.astro 引用，会去掉这段 style，
+    改用站点主题变量，因为 favicon 只能跟随系统配色，页面内要跟随站点选择。
+
+    浅色下是深底白字，深色下是浅底黑字，与 GitHub 站点图标的做法一致。
+  -->
+  <style>
+    .z-b {
+      fill: #1f2328;
+    }
+
+    .z-g {
+      fill: none;
+      stroke: #fff;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 5.2;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .z-b {
+        fill: #e6edf3;
+      }
+
+      .z-g {
+        stroke: #0d1117;
+      }
+    }
+  </style>
+  <rect class="z-b" width="32" height="32" rx="7.5" />
+  <!--
+    等粗单线：横笔、斜笔、横笔同宽，端点圆头，像一笔画成而不是把字塞进方块。
+    圆头端点比直角端点外扩半个描边（2.6），所以中心线从 8 收到 10.6，
+    墨迹才正好落在 8 到 24、8.5 到 23.5 之间，即 16 x 15。
+  -->
+  <path class="z-g" d="M10.6 11.1H21.4L10.6 20.9H21.4" />
+</svg>

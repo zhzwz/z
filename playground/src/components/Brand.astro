@@ -1,0 +1,69 @@
+---
+import { version } from '@zhzwz/z'
+import { faviconInline } from '../favicon.ts'
+
+const svg = faviconInline('brand__icon')
+---
+
+<a aria-label="@zhzwz/z" class="brand" href="/">
+  <Fragment set:html={svg} />
+  <span class="brand__version">v{version}</span>
+</a>
+
+<style is:global>
+  /* 图标来自 src/assets/favicon.svg，配色按站点主题变量控制，跟随手动选择而不只是系统配色。 */
+  .z-b {
+    fill: #1f2328;
+  }
+
+  .z-g {
+    fill: none;
+    stroke: #fff;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 5.2;
+  }
+
+  :root[data-theme-choice='dark'] .z-b {
+    fill: #e6edf3;
+  }
+
+  :root[data-theme-choice='dark'] .z-g {
+    stroke: #0d1117;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root[data-theme-choice='auto'] .z-b {
+      fill: #e6edf3;
+    }
+
+    :root[data-theme-choice='auto'] .z-g {
+      stroke: #0d1117;
+    }
+  }
+</style>
+
+<style>
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .brand:hover {
+    text-decoration: none;
+  }
+
+  :global(.brand__icon) {
+    flex: none;
+    width: 22px;
+    height: 22px;
+  }
+
+  .brand__version {
+    color: var(--text-soft);
+    font-size: 0.8125rem;
+  }
+</style>
