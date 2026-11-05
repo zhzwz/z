@@ -24,6 +24,8 @@ dictionaryDefinitions:
       - oxlint
       # PostCSS 的文件扩展名与 languageId
       - pcss
+      # 代码高亮库 Shiki
+      - shiki
       # 标签输入组件 Tagify
       - tagify
       # UnoCSS 加载配置文件所用的库

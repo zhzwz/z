@@ -86,9 +86,14 @@ pre code {
   font-size: inherit;
 }
 
-/* shiki 的双主题输出把两套颜色都写在标签上，这里按当前主题挑一套。 */
-.astro-code {
-  background-color: var(--code-bg) !important;
+/*
+ * shiki 的双主题输出把浅色和深色两套颜色都写在标签上（--shiki-dark / --shiki-dark-bg）。
+ * 这里只按当前主题挑一套，不再自设背景，避免单主题的代码块出现浅底浅字。
+ */
+:root[data-theme-choice='dark'] .astro-code,
+:root[data-theme-choice='dark'] .astro-code span {
+  background-color: var(--shiki-dark-bg) !important;
+  color: var(--shiki-dark) !important;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,12 +102,6 @@ pre code {
     background-color: var(--shiki-dark-bg) !important;
     color: var(--shiki-dark) !important;
   }
-}
-
-:root[data-theme-choice='dark'] .astro-code,
-:root[data-theme-choice='dark'] .astro-code span {
-  background-color: var(--shiki-dark-bg) !important;
-  color: var(--shiki-dark) !important;
 }
 
 /* 行号由 CSS 计数器生成，不进入代码内容，复制和读屏都不会带上。 */

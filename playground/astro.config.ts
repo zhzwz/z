@@ -11,6 +11,15 @@ export default defineConfig({
     vue(),
     mdx(),
   ],
+  markdown: {
+    // Markdown 里的代码围栏不经过 <Code>，它用这里的 shiki 配置，也要双主题才能跟随站点深浅色。
+    shikiConfig: {
+      themes: {
+        dark: 'github-dark',
+        light: 'github-light',
+      },
+    },
+  },
   vite: {
     resolve: {
       alias: [
