@@ -44,14 +44,6 @@
     "xml",
     "yaml"
   ],
-  "explorer.fileNesting.enabled": true,
-  "explorer.fileNesting.expand": false,
-  "explorer.fileNesting.patterns": {
-    "*.ts": "$(capture).test.ts",
-    "package.json": "",
-    "pnpm-workspace.yaml": "pnpm-lock.yaml",
-    "tsconfig.json": "tsconfig.*.json"
-  },
   "files.associations": {
     "**/tsconfig.json": "jsonc"
   },
