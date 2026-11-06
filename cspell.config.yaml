@@ -32,6 +32,7 @@ dictionaryDefinitions:
       - unconfig
       - unocss
       - vite
+      - vitest
       # Vue 拖拽排序组件
       - vuedraggable
       - vueuse
@@ -84,6 +85,8 @@ ignoreWords:
 # 收进词典，算正确拼写，也可以被拿来当修改建议。
 # @see https://cspell.org/docs/Configuration/properties#settings-words
 words:
+  # naive-ui 日期选择器的范围类型
+  - daterange
   # 去重，pnpm dedupe
   - dedupe
   # ARIA 属性 aria-labelledby

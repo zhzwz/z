@@ -3,8 +3,9 @@ import type { ButtonSlots } from 'naive-ui'
 import type { ExtractPublicPropTypes, PropType } from 'vue'
 import type { ZIconProps } from '../z-icon'
 import { buttonProps, NButton } from 'naive-ui'
-import { computed, onMounted, onUpdated, useAttrs, warn } from 'vue'
+import { onMounted, onUpdated, useAttrs, warn } from 'vue'
 import { ZIcon } from '../z-icon'
+import { useZnDefaults } from '../zn-config-provider/config'
 
 export const znButtonProps = {
   ...buttonProps,
@@ -19,24 +20,27 @@ export type ZnButtonProps = ExtractPublicPropTypes<typeof znButtonProps>
 
 <script setup lang="ts">
 const props = defineProps(znButtonProps)
-
 // slots 不是响应式对象，不能放进 computed，否则父组件增减插槽后不会更新。
 const slots = defineSlots<ButtonSlots>()
+
+const resolvedProps = useZnDefaults('ZnButton', props, znButtonProps)
+
 const slotNames = () => Object.keys(slots) as (keyof ButtonSlots)[]
 
-const nButtonProps = computed(() => {
-  const { icon, label, ...rest } = props
+function nButtonProps() {
+  const { icon, label, ...rest } = resolvedProps()
   return rest
-})
+}
 
 function hasIconWithoutText() {
-  const hasIcon = Boolean(slots.icon || props.icon || props.renderIcon)
-  const hasText = Boolean(slots.default || props.label)
+  const { icon, label, renderIcon } = resolvedProps()
+  const hasIcon = Boolean(slots.icon || icon || renderIcon)
+  const hasText = Boolean(slots.default || label)
   return hasIcon && !hasText
 }
 
 function iconOnly() {
-  return hasIconWithoutText() && !props.text
+  return hasIconWithoutText() && !resolvedProps().text
 }
 
 const attrs = useAttrs()
@@ -55,15 +59,15 @@ onUpdated(warnMissingName)
 </script>
 
 <template>
-  <NButton v-bind="nButtonProps" :class="{ 'zn-button--icon-only': iconOnly() }">
+  <NButton v-bind="nButtonProps()" :class="{ 'zn-button--icon-only': iconOnly() }">
     <template v-for="name in slotNames()" #[name]>
       <slot :name="name" />
     </template>
-    <template v-if="!$slots.icon && icon" #icon>
-      <ZIcon :icon="icon" />
+    <template v-if="!$slots.icon && resolvedProps().icon" #icon>
+      <ZIcon :icon="resolvedProps().icon" />
     </template>
-    <template v-if="!$slots.default && label" #default>
-      {{ label }}
+    <template v-if="!$slots.default && resolvedProps().label" #default>
+      {{ resolvedProps().label }}
     </template>
   </NButton>
 </template>

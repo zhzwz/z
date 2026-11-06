@@ -6,6 +6,23 @@ const components = new Set([
   'ZFlexCol',
   'ZIcon',
   'ZnButton',
+  'ZnCheckbox',
+  'ZnCheckboxGroup',
+  'ZnConfigProvider',
+  'ZnDate',
+  'ZnDateRange',
+  'ZnDateTime',
+  'ZnForm',
+  'ZnFormField',
+  'ZnFormItem',
+  'ZnInput',
+  'ZnInputNumber',
+  'ZnRadioGroup',
+  'ZnScrollbar',
+  'ZnSelect',
+  'ZnSelectMulti',
+  'ZnSwitch',
+  'ZnTextarea',
 ])
 
 export interface ZResolverOptions {

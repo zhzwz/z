@@ -17,6 +17,33 @@ const componentDependencies: Record<string, string[]> = {
   'z-flex-col': ['vue'],
   'z-icon': ['@iconify/vue', 'vue'],
   'zn-button': ['@iconify/vue', 'naive-ui', 'vue'],
+  'zn-checkbox': ['naive-ui', 'vue'],
+  'zn-checkbox-group': ['naive-ui', 'vue'],
+  'zn-config-provider': ['naive-ui', 'vue'],
+  'zn-date': ['date-fns', 'naive-ui', 'vue'],
+  'zn-date-range': ['date-fns', 'naive-ui', 'vue'],
+  'zn-date-time': ['date-fns', 'naive-ui', 'vue'],
+  'zn-form': [
+    '@iconify/vue',
+    'date-fns',
+    'naive-ui',
+    'vue',
+  ],
+  'zn-form-field': [
+    '@iconify/vue',
+    'date-fns',
+    'naive-ui',
+    'vue',
+  ],
+  'zn-form-item': ['naive-ui', 'vue'],
+  'zn-input': ['naive-ui', 'vue'],
+  'zn-input-number': ['naive-ui', 'vue'],
+  'zn-radio-group': ['naive-ui', 'vue'],
+  'zn-scrollbar': ['naive-ui', 'vue'],
+  'zn-select': ['@iconify/vue', 'naive-ui', 'vue'],
+  'zn-select-multi': ['@iconify/vue', 'naive-ui', 'vue'],
+  'zn-switch': ['naive-ui', 'vue'],
+  'zn-textarea': ['naive-ui', 'vue'],
 }
 
 const componentDirs = readdirSync(distUrl('components/'), { withFileTypes: true })
@@ -102,6 +129,10 @@ describe('dist', () => {
       '.z-flex',
       '.z-icon',
       '.zn-button--icon-only',
+      '.zn-config-provider',
+      '.zn-date-range__clear',
+      '.zn-form',
+      '.zn-form-item__help',
     ]) {
       expect(css).toContain(className)
     }
