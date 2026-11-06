@@ -1,0 +1,2 @@
+- 所有 `AGENTS.md` 都必须精准、简洁、实时更新；
+- git 已忽略任意 `tmp` 目录，可用于临时 script, test, scratch 等；

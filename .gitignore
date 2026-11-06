@@ -1,7 +1,11 @@
 .astro
 .DS_Store
 .vitest
+*.local.md
+*.log
 *.tgz
 *.tsbuildinfo
+coverage
 dist
 node_modules
+tmp
