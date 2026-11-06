@@ -36,11 +36,11 @@ import '@zhzwz/z/style.css'
 
 每个组件只依赖下表中的库，只需安装所用组件的依赖。`Zn*` 组件是对 [naive-ui](https://www.naiveui.com) 的二次封装。
 
-| 组件       | 需要安装的依赖                    |
-| ---------- | --------------------------------- |
-| `ZButton`  | `vue`                             |
-| `ZIcon`    | `vue`、`@iconify/vue`             |
-| `ZnButton` | `vue`、`naive-ui`、`@iconify/vue` |
+| 组件                           | 需要安装的依赖                    |
+| ------------------------------ | --------------------------------- |
+| `ZButton`、`ZFlex`、`ZFlexCol` | `vue`                             |
+| `ZIcon`                        | `vue`、`@iconify/vue`             |
+| `ZnButton`                     | `vue`、`naive-ui`、`@iconify/vue` |
 
 ### 图标
 
