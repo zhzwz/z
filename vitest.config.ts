@@ -3,6 +3,12 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
+    coverage: {
+      provider: 'v8',
+      include: ['components/**/*.{ts,vue}', 'shared/**/*.ts'],
+      exclude: ['**/*.test.ts', 'components/**/index.ts'],
+      reporter: ['text', 'html'],
+    },
     projects: [
       {
         plugins: [
@@ -10,8 +16,9 @@ export default defineConfig({
         ],
         test: {
           name: 'components',
-          include: ['components/**/*.test.ts'],
+          include: ['components/**/*.test.ts', 'shared/**/*.test.ts'],
           environment: 'happy-dom',
+          setupFiles: ['./test/setup.ts'],
         },
       },
       {

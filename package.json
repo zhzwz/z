@@ -57,11 +57,13 @@
     "build:deps": "pnpm --filter @zhzwz/eslint-config build",
     "lint": "eslint .",
     "test": "pnpm -r --if-present test && pnpm build && vitest run",
+    "test:coverage": "pnpm -r --if-present test && pnpm build && vitest run --coverage",
     "typecheck": "pnpm build:deps && vue-tsc -p . && tsc -p tsconfig.node.json && pnpm -r --if-present typecheck",
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
     "@iconify/vue": "^5.0.0",
+    "date-fns": "^4.0.0",
     "eslint": "^9.10.0 || ^10.0.0",
     "naive-ui": "^2.45.0",
     "unplugin-vue-components": "^32.0.0",
@@ -69,6 +71,9 @@
   },
   "peerDependenciesMeta": {
     "@iconify/vue": {
+      "optional": true
+    },
+    "date-fns": {
       "optional": true
     },
     "eslint": {
@@ -92,7 +97,9 @@
     "@tsdown/css": "^0.23.4",
     "@types/node": "^26.6.6",
     "@vitejs/plugin-vue": "^6.0.10",
+    "@vitest/coverage-v8": "5.1.0",
     "@vue/test-utils": "^2.5.1",
+    "date-fns": "^4.4.0",
     "eslint": "^10.14.0",
     "happy-dom": "^21.0.4",
     "jiti": "^2.7.0",
