@@ -15,5 +15,8 @@
     "vitest.config.ts",
     "test/**/*.ts",
     "packages/eslint-config/env.d.ts"
+  ],
+  "exclude": [
+    "test/consumer"
   ]
 }
