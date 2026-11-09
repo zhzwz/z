@@ -8,12 +8,13 @@ import { getCurrentInstance, provide, useTemplateRef } from 'vue'
 import { cloneData } from '../../shared/clone'
 import { forwardMethods } from '../../shared/expose'
 import { omit } from '../../shared/omit'
+import { formRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 import { ZnFormField } from '../zn-form-field'
 import { toColumnCount, znFormKey } from './context'
 
 export const znFormProps = {
-  ...omit(formProps, ['model', 'onSubmit']),
+  ...omit(formProps, formRemovedProps),
   /** 用配置渲染表单；不传时渲染默认插槽 */
   schema: Object as PropType<ZnFormSchema>,
   /** 列数；schema 里的 cols 优先，非正整数按 1 算，小数向下取整 */

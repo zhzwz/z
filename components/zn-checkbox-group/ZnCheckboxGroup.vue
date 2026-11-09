@@ -3,14 +3,10 @@ import type { ExtractPublicPropTypes, VNodeChild } from 'vue'
 import { checkboxGroupProps, NCheckboxGroup } from 'naive-ui'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { checkboxGroupRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 
-export const znCheckboxGroupProps = omit(checkboxGroupProps, [
-  'value',
-  'defaultValue',
-  'onUpdate:value',
-  'onUpdateValue',
-])
+export const znCheckboxGroupProps = omit(checkboxGroupProps, checkboxGroupRemovedProps)
 
 export type ZnCheckboxGroupProps = ExtractPublicPropTypes<typeof znCheckboxGroupProps>
 

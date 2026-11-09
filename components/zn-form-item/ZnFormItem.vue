@@ -7,11 +7,12 @@ import { inject, onBeforeUnmount, onMounted, provide, ref, useTemplateRef, watch
 import { cloneData } from '../../shared/clone'
 import { omit } from '../../shared/omit'
 import { getPath, setPath } from '../../shared/path'
+import { formItemRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 import { defaultEmptyValues, isEmptyValue, toColumnCount, toDataPaths, toItemPath, znFormItemKey, znFormKey } from '../zn-form/context'
 
 export const znFormItemProps = {
-  ...omit(formItemProps, ['path', 'rule', 'rulePath']),
+  ...omit(formItemProps, formItemRemovedProps),
   path: [String, Object] as PropType<ZnFormPath>,
   /** 额外的 naive 校验规则；path 为对象时 validator 收到的 value 是 undefined，需要自己读数据 */
   rules: Array as PropType<FormItemRule[]>,

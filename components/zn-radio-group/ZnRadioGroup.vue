@@ -3,14 +3,10 @@ import type { ExtractPublicPropTypes, VNodeChild } from 'vue'
 import { NRadioGroup, radioGroupProps } from 'naive-ui'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { radioGroupRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 
-export const znRadioGroupProps = omit(radioGroupProps, [
-  'value',
-  'defaultValue',
-  'onUpdate:value',
-  'onUpdateValue',
-])
+export const znRadioGroupProps = omit(radioGroupProps, radioGroupRemovedProps)
 
 export type ZnRadioGroupProps = ExtractPublicPropTypes<typeof znRadioGroupProps>
 

@@ -7,19 +7,10 @@ import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
 import { toTextValue } from '../../shared/text'
+import { textareaRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 
-export const znTextareaProps = omit(inputProps, [
-  'value',
-  'defaultValue',
-  'onUpdate:value',
-  'onUpdateValue',
-  'type',
-  'pair',
-  'separator',
-  'showPasswordOn',
-  'showPasswordToggle',
-])
+export const znTextareaProps = omit(inputProps, textareaRemovedProps)
 
 export type ZnTextareaProps = ExtractPublicPropTypes<typeof znTextareaProps>
 </script>

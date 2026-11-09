@@ -7,20 +7,12 @@ import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
 import { toTextValue } from '../../shared/text'
+import { inputRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 
 // 多行文本用 ZnTextarea；pair 模式的值是两个字符串，与单值的 v-model 不兼容，不提供。
 export const znInputProps = {
-  ...omit(inputProps, [
-    'value',
-    'defaultValue',
-    'onUpdate:value',
-    'onUpdateValue',
-    'pair',
-    'separator',
-    'rows',
-    'resizable',
-  ]),
+  ...omit(inputProps, inputRemovedProps),
   type: {
     type: String as PropType<'text' | 'password'>,
     default: 'text',

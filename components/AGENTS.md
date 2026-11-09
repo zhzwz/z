@@ -1,6 +1,6 @@
 # 开发约定
 
-本目录存放前端组件，新增或修改组件前先读本文；约定有变化时同步更新本文。
+本目录存放前端组件，以及只给这些组件用的函数。新增或修改前先读本文；约定有变化时同步更新本文。
 
 ## 目录与命名
 
@@ -10,7 +10,7 @@
   - `Z*`：自己实现的组件。
   - `Zn*`：naive-ui 的二次封装。
   - 不要用 `N` 开头的名字：`unplugin-vue-components` 的 `NaiveUiResolver` 会把它们解析到 `naive-ui`。
-- 组件间共用的配置由提供方组件导出，例如 `useZnConfig()` 从 `zn-config-provider/` 导出。与具体组件无关的工具放根目录 `shared/`，`components/` 下只放组件目录。
+- 组件间共用的配置由提供方组件导出，例如 `useZnConfig()` 从 `zn-config-provider/` 导出。只给组件用的函数直接放在 `components/` 下的源文件里，不要放进带 `index.ts` 的目录，否则会被当成组件入口打包。与组件无关的工具放根目录 `shared/`。
 
 ## 入口与依赖
 
@@ -25,7 +25,7 @@
 ## Zn* 组件约定
 
 1. 值绑定优先使用 `v-model`（`modelValue` / `update:modelValue`）
-   - 写法见 `zn-input/ZnInput.vue`：用 `shared/omit.ts` 从 naive 的 props 里去掉 `value`、`defaultValue`、`onUpdate:value`、`onUpdateValue`（勾选框是 `checked` 系列），值改由 `defineModel` 提供。
+   - 写法见 `zn-input/ZnInput.vue`：用 `shared/omit.ts` 去掉 `components/removed-props.ts` 里列出的 naive props，值改由 `defineModel` 提供。
    - 有两个值时用具名 `v-model`，如 `ZnDateRange` 的 `v-model:start` / `v-model:end`，对应接口里的两个字段。
 2. 一个组件只有一种值类型和一种存值格式。naive 用 prop 切换值类型或形态的（`multiple`、`type`、`valueFormat` 等），拆成单独的组件，并去掉这个 prop：`ZnSelect` / `ZnSelectMulti`，`ZnInput` / `ZnTextarea`，`ZnDate` / `ZnDateTime` / `ZnDateRange`。只为用得到的形态建组件，其余直接用 naive。
    - 日期存值格式固定（`shared/date.ts`）：日期 `yyyy-MM-dd`，日期时间 `yyyy-MM-dd HH:mm:ss`。显示格式 `format` 不影响数据，照常透传。

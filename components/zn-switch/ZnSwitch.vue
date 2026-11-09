@@ -4,18 +4,12 @@ import type { ExtractPublicPropTypes } from 'vue'
 import { NSwitch, switchProps } from 'naive-ui'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { switchRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 import { useZnFormItemEmptyValues } from '../zn-form/context'
 
 // 开关只有两种状态，值固定为 true / false，不提供 checkedValue / uncheckedValue。
-export const znSwitchProps = omit(switchProps, [
-  'value',
-  'defaultValue',
-  'onUpdate:value',
-  'onUpdateValue',
-  'checkedValue',
-  'uncheckedValue',
-])
+export const znSwitchProps = omit(switchProps, switchRemovedProps)
 
 export type ZnSwitchProps = ExtractPublicPropTypes<typeof znSwitchProps>
 

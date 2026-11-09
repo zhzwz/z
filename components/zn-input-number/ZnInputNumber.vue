@@ -6,14 +6,10 @@ import { useTemplateRef } from 'vue'
 import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { inputNumberRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 
-export const znInputNumberProps = omit(inputNumberProps, [
-  'value',
-  'defaultValue',
-  'onUpdate:value',
-  'onUpdateValue',
-])
+export const znInputNumberProps = omit(inputNumberProps, inputNumberRemovedProps)
 
 export type ZnInputNumberProps = ExtractPublicPropTypes<typeof znInputNumberProps>
 

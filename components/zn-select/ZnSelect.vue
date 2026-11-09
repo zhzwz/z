@@ -6,21 +6,13 @@ import { useTemplateRef } from 'vue'
 import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { selectRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 import { iconLabelRenderer, optionsProp } from './options'
 
 // 多选用 ZnSelectMulti，这里去掉 multiple 和只在多选时生效的 props。
 export const znSelectProps = {
-  ...omit(selectProps, [
-    'value',
-    'defaultValue',
-    'onUpdate:value',
-    'onUpdateValue',
-    'multiple',
-    'maxTagCount',
-    'ellipsisTagPopoverProps',
-    'renderTag',
-  ]),
+  ...omit(selectProps, selectRemovedProps),
   options: optionsProp,
 } as const
 

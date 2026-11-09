@@ -7,17 +7,12 @@ import { useTemplateRef } from 'vue'
 import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { selectMultiRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 import { iconLabelRenderer, optionsProp } from '../zn-select/options'
 
 export const znSelectMultiProps = {
-  ...omit(selectProps, [
-    'value',
-    'defaultValue',
-    'onUpdate:value',
-    'onUpdateValue',
-    'multiple',
-  ]),
+  ...omit(selectProps, selectMultiRemovedProps),
   options: optionsProp,
 } as const
 

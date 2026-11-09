@@ -6,18 +6,12 @@ import { useTemplateRef } from 'vue'
 import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { checkboxRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 import { useZnFormItemEmptyValues } from '../zn-form/context'
 
 // 单个勾选框只有两种状态，值固定为 true / false；放在 ZnCheckboxGroup 里时由 value 决定是否勾选。
-export const znCheckboxProps = omit(checkboxProps, [
-  'checked',
-  'defaultChecked',
-  'onUpdate:checked',
-  'onUpdateChecked',
-  'checkedValue',
-  'uncheckedValue',
-])
+export const znCheckboxProps = omit(checkboxProps, checkboxRemovedProps)
 
 export type ZnCheckboxProps = ExtractPublicPropTypes<typeof znCheckboxProps>
 

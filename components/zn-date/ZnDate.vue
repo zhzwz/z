@@ -3,17 +3,14 @@ import type { DatePickerInst, DatePickerSlots } from 'naive-ui'
 import type { ExtractPublicPropTypes } from 'vue'
 import { datePickerProps, NDatePicker } from 'naive-ui'
 import { useTemplateRef } from 'vue'
-import { dateFormat, datePickerRangeKeys, datePickerTimeKeys, datePickerValueKeys, isDateText } from '../../shared/date'
+import { dateFormat, isDateText } from '../../shared/date'
 import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
 import { omit } from '../../shared/omit'
+import { dateRemovedProps } from '../removed-props'
 import { useZnDefaults } from '../zn-config-provider/config'
 
-export const znDateProps = omit(datePickerProps, [
-  ...datePickerValueKeys,
-  ...datePickerTimeKeys,
-  ...datePickerRangeKeys,
-])
+export const znDateProps = omit(datePickerProps, dateRemovedProps)
 
 export type ZnDateProps = ExtractPublicPropTypes<typeof znDateProps>
 
