@@ -23,14 +23,7 @@ const components = new Set([
   'ZnTextarea',
 ])
 
-export interface ZResolverOptions {
-  /** @default true */
-  importStyle?: boolean
-}
-
-export function ZResolver(options: ZResolverOptions = {}): ComponentResolver {
-  const { importStyle = true } = options
-
+export function ZResolver(): ComponentResolver {
   return {
     type: 'component',
     resolve(name) {
@@ -41,7 +34,6 @@ export function ZResolver(options: ZResolverOptions = {}): ComponentResolver {
       return {
         name,
         from: `@zhzwz/z/components/${dir}`,
-        sideEffects: importStyle ? '@zhzwz/z/style.css' : undefined,
       }
     },
   }

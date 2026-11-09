@@ -39,7 +39,6 @@
       "types": "./dist/resolver.d.ts",
       "default": "./dist/resolver.js"
     },
-    "./style.css": "./dist/style.css",
     "./package.json": "./package.json"
   },
   "files": [

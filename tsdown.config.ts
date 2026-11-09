@@ -30,6 +30,67 @@ function resolveDeclarationSubpath(pkg: string, subpath: string) {
   return null
 }
 
+function withoutLeadingBlankLines(source: string | Uint8Array) {
+  if (typeof source !== 'string') {
+    return source
+  }
+  return source.replace(/^(?:\r?\n)+/, '')
+}
+
+// 样式模块的产物名带着 Vue 编译器的查询串。收成组件名，例如 ZIcon.css。
+function nameComponentCss(): Rolldown.Plugin {
+  return {
+    name: 'name-component-css',
+    generateBundle: {
+      order: 'post',
+      handler(_options, bundle) {
+        const renames = new Map<string, string>()
+        const taken = new Set<string>()
+        for (const fileName of Object.keys(bundle)) {
+          const match = /^(.*\/)?([^/]+)\.vue_vue_type_style_index_(\d+)_lang\.css$/.exec(fileName)
+          if (!match) {
+            continue
+          }
+          const [, dir = '', component, index] = match
+          let suffix = ''
+          if (index !== '0') {
+            suffix = `-${index}`
+          }
+          const cssName = `${dir}${component}${suffix}.css`
+          if (bundle[cssName] || taken.has(cssName)) {
+            this.error(`CSS 文件名冲突：${cssName}`)
+          }
+          taken.add(cssName)
+          renames.set(fileName, cssName)
+        }
+        for (const [from, to] of renames) {
+          const asset = bundle[from]
+          if (!asset || asset.type !== 'asset') {
+            continue
+          }
+          this.emitFile({
+            type: 'asset',
+            fileName: to,
+            source: withoutLeadingBlankLines(asset.source),
+          })
+          delete bundle[from]
+        }
+        for (const chunk of Object.values(bundle)) {
+          if (chunk.type !== 'chunk') {
+            continue
+          }
+          for (const [from, to] of renames) {
+            chunk.code = chunk.code.replaceAll(
+              from.slice(from.lastIndexOf('/') + 1),
+              to.slice(to.lastIndexOf('/') + 1),
+            )
+          }
+        }
+      },
+    },
+  }
+}
+
 // 声明文件里推断出的类型可能引用依赖的内部路径（如 naive-ui/es/_utils）。
 // 依赖没有 exports 时，moduleResolution: nodenext 要求深层导入写到具体文件。
 function fullySpecifyDeclarationImports(): Rolldown.Plugin {
@@ -71,6 +132,7 @@ export default defineConfig({
 
   plugins: [
     vue({ isProduction: true }),
+    nameComponentCss(),
     fullySpecifyDeclarationImports(),
   ],
 
@@ -82,8 +144,9 @@ export default defineConfig({
 
   unbundle: true,
 
-  // unbundle 默认按组件拆分 CSS，但组件 JS 不会引入拆出的文件，所以合并为 dist/style.css，由使用方或 resolver 引入。
+  // 拆到组件自己的 CSS，并在组件 JS 里引入。使用方只会带上所用组件及其依赖组件的样式。
   css: {
-    splitting: false,
+    splitting: true,
+    inject: true,
   },
 })

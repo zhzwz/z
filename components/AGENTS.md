@@ -15,6 +15,7 @@
 ## 入口与依赖
 
 - 每个组件是一个单独的入口：`@zhzwz/z/components/<component>`，对应 `dist/components/<component>/index.js`。
+- 组件 `<style>` 打进该组件自己的 CSS，由组件 JS 引入。使用方只会带上所用组件，以及这些组件引用到的组件的样式。服务端渲染需要把本包列入 `ssr.noExternal`（Nuxt 为 `build.transpile`），写法见 README。
 - 不汇总导出，使用方主要通过 `@zhzwz/z/resolver` 自动引入。
 - 组件允许依赖任何库，也允许互相引用；
 - 使用方只需安装自己用到的组件的依赖，可选 peer 依赖写进根目录 `package.json`。

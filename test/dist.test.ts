@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
@@ -44,11 +44,23 @@ const componentDependencies: Record<string, string[]> = {
   'zn-textarea': ['naive-ui', 'vue'],
 }
 
+const componentStyles: Record<string, string> = {
+  'z-flex': '.z-flex',
+  'z-icon': '.z-icon',
+  'zn-button': '.zn-button--icon-only',
+  'zn-config-provider': '.zn-config-provider',
+  'zn-date-range': '.zn-date-range__clear',
+  'zn-form': '.zn-form',
+  'zn-form-item': '.zn-form-item__help',
+}
+
 const componentDirs = readdirSync(distUrl('components/'), { withFileTypes: true })
   .filter(entry => entry.isDirectory())
   .map(entry => entry.name)
 
 const toComponentName = (dir: string) => dir.replace(/(?:^|-)([a-z])/g, (_, char: string) => char.toUpperCase())
+
+const classSelector = (className: string) => new RegExp(`${className.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![\\w-])`)
 
 function packageName(specifier: string) {
   const [scopeOrName, name] = specifier.split('/')
@@ -108,31 +120,44 @@ describe('dist', () => {
       expect(ZResolver().resolve(name)).toEqual({
         name,
         from: `@zhzwz/z/components/${dir}`,
-        sideEffects: '@zhzwz/z/style.css',
       })
+    })
+
+    it('ships its own style with the component', () => {
+      const js = readDist(`components/${dir}/${name}.js`)
+      const className = componentStyles[dir]
+      if (!className) {
+        expect(js).not.toContain('.css')
+        expect(existsSync(distUrl(`components/${dir}/${name}.css`))).toBe(false)
+        return
+      }
+      expect(js).toContain(`"./${name}.css"`)
+      const css = readDist(`components/${dir}/${name}.css`)
+      expect(css).toMatch(/^\S/)
+      expect(css).toMatch(classSelector(className))
+      for (const other of Object.values(componentStyles)) {
+        if (other !== className) {
+          expect(css).not.toMatch(classSelector(other))
+        }
+      }
     })
   })
 
-  it('leaves unknown components and styles to the caller', async () => {
+  it('leaves unknown components to the caller', async () => {
     const { ZResolver } = await importDist('resolver.js')
     expect(ZResolver().resolve('ZUnknown')).toBeUndefined()
     expect(ZResolver().resolve('NButton')).toBeUndefined()
-    expect(ZResolver({ importStyle: false }).resolve('ZnButton')).toMatchObject({ sideEffects: undefined })
   })
 
-  it('emits component styles', () => {
-    const css = readDist('style.css')
-    for (const className of [
-      '.z-flex',
-      '.z-icon',
-      '.zn-button--icon-only',
-      '.zn-config-provider',
-      '.zn-date-range__clear',
-      '.zn-form',
-      '.zn-form-item__help',
-    ]) {
-      expect(css).toContain(className)
-    }
+  it('does not emit a combined stylesheet', () => {
+    expect(existsSync(distUrl('style.css'))).toBe(false)
+    expect(pkg.exports).not.toHaveProperty('./style.css')
+  })
+
+  it('pulls a dependency component style through the js graph', () => {
+    expect(readDist('components/zn-button/ZnButton.js')).toContain('"../z-icon/ZIcon.js"')
+    expect(readDist('components/z-icon/ZIcon.js')).toContain('"./ZIcon.css"')
+    expect(readDist('components/zn-button/ZnButton.css')).not.toContain('.z-icon')
   })
 
   describe('types for consumers', () => {

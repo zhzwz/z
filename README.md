@@ -24,15 +24,24 @@ export default defineConfig({
 })
 ```
 
-自行引入样式时，传 `ZResolver({ importStyle: false })`。
-
-也可以手动导入。每个组件是单独的入口，没有汇总导出所有组件的入口：
+也可以手动导入。每个组件是单独的入口，没有汇总导出所有组件的入口。引入组件时会带上它自己的样式：
 
 ```ts
 import { ZFlex } from '@zhzwz/z/components/z-flex'
 import { ZnButton } from '@zhzwz/z/components/zn-button'
-import '@zhzwz/z/style.css'
 ```
+
+服务端渲染时把本包打进 bundle，组件引出的 CSS 才能由打包器处理：
+
+```ts
+export default defineConfig({
+  ssr: {
+    noExternal: ['@zhzwz/z'],
+  },
+})
+```
+
+Nuxt 里写成 `build.transpile: ['@zhzwz/z']`。
 
 每个组件只依赖下表中的库，只需安装所用组件的依赖。`Zn*` 组件是对 [naive-ui](https://www.naiveui.com) 的二次封装。
 
