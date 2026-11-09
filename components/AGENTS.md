@@ -46,7 +46,7 @@
    - 选项异步加载的组件（如下拉选择）不因值暂时不在选项里而回写。
    - 能如实显示、但业务上不合法的值不回写，交给 `ZnForm` 的校验规则在提交时拦截。例如日期范围的开始晚于结束：保留显示，提交时报错。这类组件自带的校验用 `zn-form/context.ts` 的 `useZnFormItemCheck` 登记到所在的 `ZnFormItem`，写法见 `zn-date-range/ZnDateRange.vue`。
      - 值可能被外部整段改写（接口回填），校验结果要随之变化：`useZnFormItemCheck` 返回重新校验的函数，在相关值变化后调用它。重新校验走完整的 `validate()`（不只 `change` 规则，否则 `blur` 规则的报错会被清掉）；表单项没校验过时不刷出红字，`reset()` 后也不再自动校验。
-     - 日期范围只有一端有值时 naive 显示不了：这一端不回写为 `null`（两端分两次赋值时先到的一端不会丢），界面留空，提交时由组件自带的校验拦下。此时 naive 认为「没有值」，自带的清空按钮不出现，所以组件自己在 `#date-icon` 位置补一个清空按钮（见 `zn-date-range/ZnDateRange.vue` 的 `showClear`）。
+     - 日期范围只有一端有值时 naive 显示不了：这一端不回写为 `null`（两端分两次赋值时先到的一端不会丢），界面留空，提交时由组件自带的校验拦下。此时 naive 认为「没有值」，自带的清空按钮不出现，所以组件自己在 `#date-icon` 位置补一个清空按钮（见 `zn-date-range/ZnDateRange.vue` 的 `showClear`）。日期框自己禁用，或所在表单禁用时，这个按钮不出现。
 5. naive 的 props 全部透传且有类型：用 naive 导出的运行时 props 对象，如 `defineProps({ ...buttonProps })`，不要手抄 props 列表。
 6. 插槽全部透传；实例方法（`focus`、`blur` 等）用 `defineExpose(forwardMethods(ref, [...]))` 转发（`shared/expose.ts`）。插槽按 `zn-button/ZnButton.vue` 的写法遍历转发：插槽名在渲染时取，不要放进 `computed`（`slots` 不是响应式的，父组件增减插槽后不会更新）。
    - 有插槽带参数时按 `zn-input/ZnInput.vue` 的写法转发参数；naive 没有导出插槽类型的组件（如勾选框、单选组）只转发默认插槽。

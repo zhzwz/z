@@ -24,6 +24,28 @@ function inputs(wrapper: ReturnType<typeof mountRange>['wrapper']) {
   return wrapper.findAll('input').map(input => input.element.value)
 }
 
+function mountClearableForm(formProps: Record<string, unknown>, pickerProps: Record<string, unknown> = {}) {
+  const data = ref({ start: '2024-01-01' as string | null, end: null as string | null })
+  return mount(defineComponent({
+    render: () => h(ZnForm, {
+      ...formProps,
+      modelValue: data.value,
+      'onUpdate:modelValue': (value: Record<string, unknown>) => {
+        data.value = value as { end: string | null, start: string | null }
+      },
+    }, () => h(ZnFormItem, {
+      path: { start: 'start', end: 'end' },
+    }, () => h(ZnDateRange, {
+      ...pickerProps,
+      clearable: true,
+      start: data.value.start,
+      end: data.value.end,
+      'onUpdate:start': (value: string | null) => (data.value = { ...data.value, start: value }),
+      'onUpdate:end': (value: string | null) => (data.value = { ...data.value, end: value }),
+    }))),
+  }))
+}
+
 function mountForm(model: Record<string, unknown>, rules: FormItemRule[] = []) {
   const data = ref(model)
   const wrapper = mount(defineComponent({
@@ -105,6 +127,60 @@ describe('<ZnDateRange>', () => {
   })
 
   describe('in a form', () => {
+    it('uses the range message when the field is required and only one end is set', async () => {
+      const data = ref({ from: '2024-01-01' as string | null, to: null as string | null })
+      const wrapper = mount(defineComponent({
+        render: () => h(ZnForm, {
+          modelValue: data.value,
+          'onUpdate:modelValue': (value: Record<string, unknown>) => {
+            data.value = value as typeof data.value
+          },
+        }, () => h(ZnFormItem, {
+          path: { start: 'from', end: 'to' },
+          label: '有效期',
+          required: true,
+        }, () => h(ZnDateRange, {
+          start: data.value.from,
+          end: data.value.to,
+          'onUpdate:start': (value: string | null) => (data.value = { ...data.value, from: value }),
+          'onUpdate:end': (value: string | null) => (data.value = { ...data.value, to: value }),
+        }))),
+      }), { attachTo: document.body })
+      await nextTick()
+
+      await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(false)
+      expect(wrapper.text()).toContain('开始和结束日期需要同时填写')
+      expect(wrapper.text()).not.toContain('不能为空')
+      wrapper.unmount()
+    })
+
+    it('uses the required message when both ends are empty', async () => {
+      const data = ref({ from: null as string | null, to: null as string | null })
+      const wrapper = mount(defineComponent({
+        render: () => h(ZnForm, {
+          modelValue: data.value,
+          'onUpdate:modelValue': (value: Record<string, unknown>) => {
+            data.value = value as typeof data.value
+          },
+        }, () => h(ZnFormItem, {
+          path: { start: 'from', end: 'to' },
+          label: '有效期',
+          required: true,
+        }, () => h(ZnDateRange, {
+          start: data.value.from,
+          end: data.value.to,
+          'onUpdate:start': (value: string | null) => (data.value = { ...data.value, from: value }),
+          'onUpdate:end': (value: string | null) => (data.value = { ...data.value, to: value }),
+        }))),
+      }), { attachTo: document.body })
+      await nextTick()
+
+      await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(false)
+      expect(wrapper.text()).toContain('有效期不能为空')
+      expect(wrapper.text()).not.toContain('开始和结束日期需要同时填写')
+      wrapper.unmount()
+    })
+
     it('reports a missing end on submit', async () => {
       const { form, data } = mountForm({ from: '2024-01-01', to: null })
       await nextTick()
@@ -191,6 +267,33 @@ describe('<ZnDateRange> half-filled', () => {
     const { wrapper } = mountRange({ start: '2024-01-01', end: '2024-01-02' }, { clearable: true })
     await nextTick()
     expect(wrapper.find('.zn-date-range__clear').exists()).toBe(false)
+  })
+
+  it('hides the clear button when the picker is disabled', async () => {
+    const { wrapper } = mountRange({ start: '2024-01-01', end: null }, { clearable: true, disabled: true })
+    await nextTick()
+    expect(wrapper.find('.zn-date-range__clear').exists()).toBe(false)
+  })
+
+  it('hides the clear button when the form is disabled', async () => {
+    const wrapper = mountClearableForm({ disabled: true })
+    await nextTick()
+    expect(wrapper.find('.zn-date-range__clear').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('shows the clear button inside an enabled form', async () => {
+    const wrapper = mountClearableForm({})
+    await nextTick()
+    expect(wrapper.find('.zn-date-range__clear').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('shows the clear button when the form is disabled but the picker is explicitly enabled', async () => {
+    const wrapper = mountClearableForm({ disabled: true }, { disabled: false })
+    await nextTick()
+    expect(wrapper.find('.zn-date-range__clear').exists()).toBe(true)
+    wrapper.unmount()
   })
 
   it('hides the clear button without clearable', async () => {

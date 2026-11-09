@@ -2,7 +2,7 @@
 import type { DatePickerInst, DatePickerSlots } from 'naive-ui'
 import type { ExtractPublicPropTypes } from 'vue'
 import { datePickerProps, NDatePicker } from 'naive-ui'
-import { computed, useTemplateRef, watch } from 'vue'
+import { computed, inject, useTemplateRef, watch } from 'vue'
 import { dateFormat, datePickerTimeKeys, datePickerValueKeys, isDateText } from '../../shared/date'
 import { forwardMethods } from '../../shared/expose'
 import { useDisplayedModel } from '../../shared/model'
@@ -65,10 +65,22 @@ function clear() {
   updateRange(null)
 }
 
+// naive 把表单的 disabled 注在这个字符串键上，没有公开导出。日期框靠它禁用，清空按钮也要跟着。
+const naiveFormItem = inject<{ disabled: { value: boolean } } | null>('n-form-item', null)
+
+function pickerDisabled() {
+  const { disabled } = resolvedProps()
+  if (disabled !== undefined) {
+    return disabled === true
+  }
+  return naiveFormItem?.disabled.value === true
+}
+
 // 只有一端有值时 range 是 null，naive 认为没有值，trigger 上的清空按钮不出现：这一端既看不见也清不掉。
 // 补一个清空按钮，让用户能从这种半填状态里出来。
 function showClear() {
   return resolvedProps().clearable
+    && !pickerDisabled()
     && (startDate.value !== null || endDate.value !== null)
     && range.value === null
 }
