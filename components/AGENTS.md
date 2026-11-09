@@ -4,8 +4,8 @@
 
 ## 目录与命名
 
-- 每个组件一个目录，目录名是组件的 kebab-case 名：`z-button/`、`zn-input/`。目录内为 `ZButton.vue`、`ZButton.test.ts`、`index.ts` 等。
-- props 接口写在 `.vue` 里并导出（`export interface ZButtonProps`），由 `index.ts` 连同组件一起导出。
+- 每个组件一个目录，目录名是组件的 kebab-case 名：`z-flex/`、`zn-input/`。目录内为 `ZFlex.vue`、`ZFlex.test.ts`、`index.ts` 等。
+- props 接口写在 `.vue` 里并导出（`export interface ZFlexProps`），由 `index.ts` 连同组件一起导出。
 - 前缀表示实现方式：
   - `Z*`：自己实现的组件。
   - `Zn*`：naive-ui 的二次封装。

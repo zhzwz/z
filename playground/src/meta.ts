@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import process from 'node:process'
 import { createCheckerByJson } from 'vue-component-meta'
 
-/** 组件名到目录名，如 `ZButton` 到 `z-button`，与 resolver 的规则一致。 */
+/** 组件名到目录名，如 `ZFlex` 到 `z-flex`，与 resolver 的规则一致。 */
 function toDir(name: string) {
   return name.replace(/\B([A-Z])/g, '-$1').toLowerCase()
 }

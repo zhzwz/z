@@ -29,7 +29,7 @@ export default defineConfig({
 也可以手动导入。每个组件是单独的入口，没有汇总导出所有组件的入口：
 
 ```ts
-import { ZButton } from '@zhzwz/z/components/z-button'
+import { ZFlex } from '@zhzwz/z/components/z-flex'
 import { ZnButton } from '@zhzwz/z/components/zn-button'
 import '@zhzwz/z/style.css'
 ```
@@ -38,7 +38,7 @@ import '@zhzwz/z/style.css'
 
 | 组件                                                                                                                                                   | 需要安装的依赖                                |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------- |
-| `ZButton`、`ZFlex`                                                                                                                                     | `vue`                                         |
+| `ZFlex`                                                                                                                                                | `vue`                                         |
 | `ZIcon`                                                                                                                                                | `vue`、`@iconify/vue`                         |
 | `ZnButton`、`ZnSelect`、`ZnSelectMulti`                                                                                                                | `vue`、`naive-ui`、`@iconify/vue`             |
 | `ZnDate`、`ZnDateTime`、`ZnDateRange`                                                                                                                  | `vue`、`naive-ui`、`date-fns`                 |

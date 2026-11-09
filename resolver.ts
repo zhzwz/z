@@ -1,7 +1,6 @@
 import type { ComponentResolver } from 'unplugin-vue-components/types'
 
 const components = new Set([
-  'ZButton',
   'ZFlex',
   'ZIcon',
   'ZnButton',

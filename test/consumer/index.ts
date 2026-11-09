@@ -1,5 +1,4 @@
 // 以使用方的身份对产物做类型检查，见 test/dist.test.ts。
-import type { ZButtonProps } from '@zhzwz/z/components/z-button'
 import type { ZFlexProps } from '@zhzwz/z/components/z-flex'
 import type { ZIconProps } from '@zhzwz/z/components/z-icon'
 import type { ZnButtonProps } from '@zhzwz/z/components/zn-button'
@@ -7,7 +6,6 @@ import type { ZnDefaults } from '@zhzwz/z/components/zn-config-provider'
 import type { ZnFormSchema } from '@zhzwz/z/components/zn-form'
 import type { ZnInputProps } from '@zhzwz/z/components/zn-input'
 import type { ZnSelectOption, ZnSelectProps, ZnSelectValue } from '@zhzwz/z/components/zn-select'
-import { ZButton } from '@zhzwz/z/components/z-button'
 import { ZFlex } from '@zhzwz/z/components/z-flex'
 import { ZIcon } from '@zhzwz/z/components/z-icon'
 import { ZnButton } from '@zhzwz/z/components/zn-button'
@@ -30,7 +28,6 @@ import { ZnSwitch } from '@zhzwz/z/components/zn-switch'
 import { ZnTextarea } from '@zhzwz/z/components/zn-textarea'
 
 export const components = [
-  ZButton,
   ZFlex,
   ZIcon,
   ZnButton,
@@ -53,7 +50,6 @@ export const components = [
   ZnTextarea,
 ]
 
-export const buttonProps: ZButtonProps = {}
 export const flexProps: ZFlexProps = { gap: 0.5, place: 'between center' }
 export const iconProps: ZIconProps = { icon: 'ic:round-add' }
 export const znButtonProps: ZnButtonProps = { icon: 'ic:round-add', label: '新建', type: 'primary' }

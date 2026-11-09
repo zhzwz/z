@@ -24,7 +24,7 @@ function rank(section: string) {
     : index
 }
 
-/** 内容条目 id 到路由，如 `components/z-button` 到 `/components/z-button/`，`index` 到 `/`。 */
+/** 内容条目 id 到路由，如 `components/z-flex` 到 `/components/z-flex/`，`index` 到 `/`。 */
 export function entryHref(id: string) {
   return id === 'index'
     ? '/'

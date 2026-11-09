@@ -12,7 +12,6 @@ const importDist = (fileName: string) => import(distUrl(fileName).href)
 
 // 每个组件允许依赖的外部包，也是 README 中"需要安装的依赖"的依据。
 const componentDependencies: Record<string, string[]> = {
-  'z-button': ['vue'],
   'z-flex': ['vue'],
   'z-icon': ['@iconify/vue', 'vue'],
   'zn-button': ['@iconify/vue', 'naive-ui', 'vue'],
@@ -124,7 +123,6 @@ describe('dist', () => {
   it('emits component styles', () => {
     const css = readDist('style.css')
     for (const className of [
-      '.z-button',
       '.z-flex',
       '.z-icon',
       '.zn-button--icon-only',
