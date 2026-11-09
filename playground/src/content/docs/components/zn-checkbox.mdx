@@ -1,0 +1,19 @@
+---
+title: ZnCheckbox
+description: 单个勾选框。值为 true 或 false。
+order: 15
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-checkbox/basic.vue'
+
+和开关一样，只有两种状态。必填时 `false` 算未填。一组选项用 `ZnCheckboxGroup`，子项仍然是 `ZnCheckbox`，用 `value` 标明这一项。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnCheckbox" />

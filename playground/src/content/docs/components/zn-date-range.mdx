@@ -1,0 +1,23 @@
+---
+title: ZnDateRange
+description: 日期范围。开始和结束是两个独立的字段。
+order: 22
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-date-range/basic.vue'
+
+```vue
+<ZnDateRange v-model:start="form.startDate" v-model:end="form.endDate" />
+```
+
+两端可以分两次赋值，先到的一端不会被清掉。只有一端有值时，日期框显示为空，右侧出现清空按钮；放在 `ZnFormItem` 里提交时，会提示「开始和结束日期需要同时填写」。开始晚于结束会提示「开始日期不能晚于结束日期」，两个日期仍照常显示。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnDateRange" />

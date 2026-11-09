@@ -1,0 +1,19 @@
+---
+title: ZnSelectMulti
+description: 下拉多选。值为数组，没有选中时是空数组。
+order: 19
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-select-multi/basic.vue'
+
+选项和 `ZnSelect` 相同。`null` 会回写成 `[]`。值暂时不在选项里时会保留。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnSelectMulti" />

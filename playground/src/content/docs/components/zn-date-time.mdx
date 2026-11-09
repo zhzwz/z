@@ -1,0 +1,19 @@
+---
+title: ZnDateTime
+description: 日期时间。存值格式固定为 yyyy-MM-dd HH:mm:ss。
+order: 21
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-date-time/basic.vue'
+
+只有日期、没有时间的字符串会回写成 `null`。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnDateTime" />

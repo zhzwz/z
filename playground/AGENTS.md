@@ -47,6 +47,8 @@ import NaiveTheme from '@/components/NaiveTheme.vue'
 </template>
 ```
 
+演示里如果包了 `ZnConfigProvider`，页面上改用 `client:only="vue"`。它默认 `inlineThemeDisabled`，服务端渲染时 naive-ui 会访问 `document`。没包的 `ZnButton` 仍用 `client:visible`。
+
 2. 在 `src/content/docs/components/` 下新建 `<组件目录名>.mdx`：
 
    ```mdx

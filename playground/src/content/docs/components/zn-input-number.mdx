@@ -1,0 +1,21 @@
+---
+title: ZnInputNumber
+description: 数字输入。值为 number 或 null。
+order: 13
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-input-number/basic.vue'
+
+没有值时是 `null`，不是空字符串。数字字符串会写成数字。`0` 会保留。
+
+其余 props 与 naive-ui 的 [InputNumber](https://www.naiveui.com/zh-CN/os-theme/components/input-number) 一致。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnInputNumber" />

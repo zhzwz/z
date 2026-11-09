@@ -1,0 +1,26 @@
+---
+title: ZFlex
+description: 横向弹性布局，用 place 一次写明主轴和交叉轴。
+order: 3
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Place from '@/demos/z-flex/place.vue'
+import Column from '@/demos/z-flex/column.vue'
+
+`gap` 是数字时单位为 rem，字符串则原样作为 CSS 的 `gap`。`place` 写成 `'<主轴> <交叉轴>'`，例如 `'between center'`。只写一个词时，`between` / `around` / `evenly` 只作用于主轴，`stretch` / `baseline` 只作用于交叉轴，`start` / `center` / `end` 两个轴都生效。
+
+<Demo of={Place}>
+  <Place client:visible />
+</Demo>
+
+`column` 改成纵向。纵向排一条的写法也可以直接用 `ZFlexCol`。
+
+<Demo of={Column}>
+  <Column client:visible />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZFlex" />

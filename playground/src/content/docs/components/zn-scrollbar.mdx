@@ -1,0 +1,19 @@
+---
+title: ZnScrollbar
+description: 对 naive-ui 滚动条的封装，用 size 指定粗细。
+order: 7
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Size from '@/demos/zn-scrollbar/size.vue'
+
+其余 props 与 naive-ui 的 [Scrollbar](https://www.naiveui.com/zh-CN/os-theme/components/scrollbar) 一致。`size` 的单位是 px，会覆盖 `themeOverrides` 里的 `width` / `height`，并且不改传入的那个对象。
+
+<Demo of={Size}>
+  <Size client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnScrollbar" />

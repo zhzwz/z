@@ -32,13 +32,32 @@ import '@zhzwz/z/style.css'
 
 ## 组件一览
 
-| 组件       | 说明                                 | 需要安装的依赖                    |
-| ---------- | ------------------------------------ | --------------------------------- |
-| `ZButton`  | 基础的按钮                           | `vue`                             |
-| `ZIcon`    | 图标，支持 iconify 名称、数据与组件  | `vue`、`@iconify/vue`             |
-| `ZnButton` | 对 naive-ui 按钮的封装               | `vue`、`naive-ui`、`@iconify/vue` |
+| 组件 | 说明 | 需要安装的依赖 |
+| --- | --- | --- |
+| `ZButton` | 基础的按钮 | `vue` |
+| `ZIcon` | 图标，支持 iconify 名称、数据与组件 | `vue`、`@iconify/vue` |
+| `ZFlex` | 横向弹性布局 | `vue` |
+| `ZFlexCol` | 纵向弹性布局 | `vue` |
+| `ZnButton` | 对 naive-ui 按钮的封装 | `vue`、`naive-ui`、`@iconify/vue` |
+| `ZnConfigProvider` | 中文语言包、消息层，以及组件默认 props | `vue`、`naive-ui` |
+| `ZnScrollbar` | 滚动条，可用 `size` 指定粗细 | `vue`、`naive-ui` |
+| `ZnForm` | 表单，可写模板，也可用 schema | `vue`、`naive-ui`、`date-fns`、`@iconify/vue` |
+| `ZnFormItem` | 表单项：标签、必填、占列、说明 | `vue`、`naive-ui` |
+| `ZnFormField` | 按 schema 的一项渲染字段 | `vue`、`naive-ui`、`date-fns`、`@iconify/vue` |
+| `ZnInput` | 单行文本，值为 `string \| null` | `vue`、`naive-ui` |
+| `ZnTextarea` | 多行文本，值为 `string \| null` | `vue`、`naive-ui` |
+| `ZnInputNumber` | 数字，值为 `number \| null` | `vue`、`naive-ui` |
+| `ZnSwitch` | 开关，值为 `boolean` | `vue`、`naive-ui` |
+| `ZnCheckbox` | 单个勾选框，值为 `boolean` | `vue`、`naive-ui` |
+| `ZnCheckboxGroup` | 多选组，值为数组 | `vue`、`naive-ui` |
+| `ZnRadioGroup` | 单选组，值为 `string \| number \| boolean \| null` | `vue`、`naive-ui` |
+| `ZnSelect` | 下拉单选 | `vue`、`naive-ui`、`@iconify/vue` |
+| `ZnSelectMulti` | 下拉多选 | `vue`、`naive-ui`、`@iconify/vue` |
+| `ZnDate` | 日期，存值 `yyyy-MM-dd` | `vue`、`naive-ui`、`date-fns` |
+| `ZnDateTime` | 日期时间，存值 `yyyy-MM-dd HH:mm:ss` | `vue`、`naive-ui`、`date-fns` |
+| `ZnDateRange` | 日期范围，起止各一个字段 | `vue`、`naive-ui`、`date-fns` |
 
-`Zn*` 组件是对 [naive-ui](https://www.naiveui.com) 的二次封装，props 与插槽和 naive 保持一致。
+`Zn*` 用 `v-model` 绑定值，不提供 `value`。没有值时，单值为 `null`，多值为 `[]`，开关和单个勾选框为 `false`。文本框里的空字符串会保留；用户主动清空时才写成 `null`。应用根上包一层 `ZnConfigProvider`，输入类默认可清空，下拉默认可搜索。
 
 ## 关于这个文档站
 

@@ -1,0 +1,23 @@
+---
+title: ZnInput
+description: 单行文本。值为 string 或 null。
+order: 11
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-input/basic.vue'
+
+用 `v-model` 绑定，不提供 `value`。`type` 只有 `text` 和 `password`，多行文本用 `ZnTextarea`。
+
+空字符串会保留。用户点清空时写成 `null`。在 `ZnConfigProvider` 里，默认可清空。
+
+其余 props 与 naive-ui 的 [Input](https://www.naiveui.com/zh-CN/os-theme/components/input) 一致。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnInput" />

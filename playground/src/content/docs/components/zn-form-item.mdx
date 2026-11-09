@@ -1,0 +1,21 @@
+---
+title: ZnFormItem
+description: 表单项，负责标签、必填、占列和说明。
+order: 9
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Layout from '@/demos/zn-form-item/layout.vue'
+
+`path` 是数据路径。日期范围这类有两个值的组件写成 `{ start: 'startDate', end: 'endDate' }`。必填时 `undefined`、`null`、`''`、`[]` 算未填；字段上还没有这个键，值就是 `undefined`。`false` 只在开关和单个勾选框上算未填。
+
+`span` 是占几列，超过 `ZnForm` 的列数时按列数算。`help` 显示在组件下方。`defaultValue` 在字段为空时填入，`reset()` 也会恢复成它。
+
+<Demo of={Layout}>
+  <Layout client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnFormItem" />

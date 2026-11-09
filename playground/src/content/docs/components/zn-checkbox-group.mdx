@@ -1,0 +1,19 @@
+---
+title: ZnCheckboxGroup
+description: 多选组。值为数组，没有选中时是空数组。
+order: 16
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-checkbox-group/basic.vue'
+
+`null` 会回写成 `[]`。必填时空数组算未填。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnCheckboxGroup" />

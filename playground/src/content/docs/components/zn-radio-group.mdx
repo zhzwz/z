@@ -1,0 +1,19 @@
+---
+title: ZnRadioGroup
+description: 单选组。没有选中时是 null。
+order: 17
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-radio-group/basic.vue'
+
+选项用 naive-ui 的 `NRadio`，`value` 可以是字符串、数字或布尔值。`false` 是一次真实的选择，必填时不算未填。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnRadioGroup" />

@@ -1,0 +1,34 @@
+---
+title: ZnForm
+description: 表单。模板和 schema 渲染同样的字段。
+order: 8
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Fields from '@/demos/zn-form/fields.vue'
+import Schema from '@/demos/zn-form/schema.vue'
+
+用 `v-model` 绑定数据对象。其余 props 透传 naive-ui 的 [Form](https://www.naiveui.com/zh-CN/os-theme/components/form)，但不使用它的 `model`。
+
+校验通过后触发 `submit`，参数是数据的深拷贝。表单里按回车也会提交。实例方法有 `submit()`、`validate(paths?)`、`reset()`、`restoreValidation()`。
+
+<Demo of={Fields}>
+  <Fields client:only="vue" />
+</Demo>
+
+## Schema
+
+不传默认插槽、改传 `schema` 时，按配置渲染同样的字段。`schema` 只含纯数据，可以存成 JSON。`cols` 和字段的 `span` 只认正整数。
+
+传了 `schema` 之后默认插槽不再渲染，提交按钮要放在表单外面，调用实例的 `submit()`。没通过时错误和模板写法一样；通过后 `submit` 事件的参数仍是数据的深拷贝。
+
+<Demo of={Schema}>
+  <Schema client:only="vue" />
+</Demo>
+
+`path` 为字符串时对应组件的 `v-model`，支持 `contact.phone` 这样的点号路径。组件有多个值时写成对象，键是具名 v-model。路径里不能出现 `__proto__`、`constructor`、`prototype`。来自外部的 schema 可以先用 `validateZnFormSchema` 检查。
+
+## 接口
+
+<ApiTable name="ZnForm" />

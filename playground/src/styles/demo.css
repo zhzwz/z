@@ -19,3 +19,18 @@ form.row + .row {
   display: grid;
   gap: 8px;
 }
+
+.panel {
+  width: min(100%, 40rem);
+}
+
+.note {
+  color: var(--text-soft);
+  font-size: 13px;
+}
+
+.scroll-box {
+  height: 9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}

@@ -1,0 +1,29 @@
+---
+title: ZnConfigProvider
+description: 中文语言包、消息层，以及各 Zn 组件的默认 props。
+order: 6
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Defaults from '@/demos/zn-config-provider/defaults.vue'
+
+包住应用根。它透传 naive-ui 的 [ConfigProvider](https://www.naiveui.com/zh-CN/os-theme/components/config-provider) props，并额外做三件事：
+
+- 最外层默认中文（`zhCN`、`dateZhCN`）。`locale` 传 `null` 则用 naive 自带的英文。
+- 最外层带上 `NLoadingBarProvider`、`NDialogProvider`、`NNotificationProvider`、`NMessageProvider`，里面可以直接用 `useMessage()` 等。嵌套的 `ZnConfigProvider` 不再重复套这几层。
+- `defaults` 按组件名覆盖内置默认值。优先级从高到低：组件上显式传的 prop、内层 `defaults`、外层 `defaults`、内置默认值、naive 默认值。
+
+内置默认值包括：输入类可清空，下拉可搜索，日期可清空并打开年月快选，开关不是圆角。`defaults` 里组件不接受的键会被忽略，不会透传给 naive。
+
+<Demo of={Defaults}>
+  <Defaults client:only="vue" />
+</Demo>
+
+`class`、`style` 落在一个 `display: contents` 的元素上，不占布局。
+
+## 接口
+
+以下只列额外属性。naive-ui 的 props 见其文档。
+
+<ApiTable name="ZnConfigProvider" />

@@ -1,0 +1,19 @@
+---
+title: ZnTextarea
+description: 多行文本。值为 string 或 null。
+order: 12
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-textarea/basic.vue'
+
+值的规则与 `ZnInput` 相同。组件固定为多行，不再接收 `type`。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnTextarea" />

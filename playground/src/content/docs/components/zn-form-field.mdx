@@ -1,0 +1,21 @@
+---
+title: ZnFormField
+description: 把 schema 的一项渲染成 ZnFormItem 和字段组件。
+order: 10
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Field from '@/demos/zn-form-field/field.vue'
+
+通常不用直接写这个组件。`ZnForm` 收到 `schema` 后，每一项都由它渲染。可用的 `component` 见 `znFormComponents`。未登记的名字不会渲染，并在控制台报一次。
+
+`defaultValue` 只在对应数据为空时填入，字段上还没有这个键也算空。多行共用同一份 schema 时各自拿到拷贝。
+
+<Demo of={Field}>
+  <Field client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnFormField" />

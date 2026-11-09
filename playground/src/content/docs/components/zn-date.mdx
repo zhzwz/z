@@ -1,0 +1,21 @@
+---
+title: ZnDate
+description: 日期。存值格式固定为 yyyy-MM-dd。
+order: 20
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-date/basic.vue'
+
+`format` 只影响显示，不改变存值。对不上 `yyyy-MM-dd` 的字符串会回写成 `null`。需要时间用 `ZnDateTime`，需要范围用 `ZnDateRange`。
+
+在 `ZnConfigProvider` 里默认可清空，并打开年月快选。其余 props 与 naive-ui 的 [DatePicker](https://www.naiveui.com/zh-CN/os-theme/components/date-picker) 一致。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnDate" />

@@ -1,0 +1,21 @@
+---
+title: ZnSwitch
+description: 开关。只有 true 和 false。
+order: 14
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-switch/basic.vue'
+
+需要「未设置 / 是 / 否」三种状态时用 `ZnRadioGroup`，不要用开关。放进必填的 `ZnFormItem` 时，`false` 算未填。
+
+在 `ZnConfigProvider` 里默认不是圆角。其余 props 与 naive-ui 的 [Switch](https://www.naiveui.com/zh-CN/os-theme/components/switch) 一致。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnSwitch" />

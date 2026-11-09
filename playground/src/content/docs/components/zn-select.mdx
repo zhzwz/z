@@ -1,0 +1,23 @@
+---
+title: ZnSelect
+description: 下拉单选。值为 string、number 或 null。
+order: 18
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Basic from '@/demos/zn-select/basic.vue'
+
+多选用 `ZnSelectMulti`。选项上的 `icon` 用法同 `ZIcon`；传了 `renderLabel` 时由它负责渲染。
+
+值暂时不在选项里时会保留，方便选项稍后从接口返回。在 `ZnConfigProvider` 里默认可清空、可搜索。
+
+其余 props 与 naive-ui 的 [Select](https://www.naiveui.com/zh-CN/os-theme/components/select) 一致。
+
+<Demo of={Basic}>
+  <Basic client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnSelect" />

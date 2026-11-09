@@ -97,7 +97,7 @@ const schema: ZnFormSchema = {
 - schema 只含纯数据，可以存成 JSON；`validateZnFormSchema(schema)` 检查未知组件、path 形状不对、path 含不安全的段、`id` 重复、`cols` / `span` 不是正整数等问题，返回的 issue 里 `index` 是出问题的字段下标，schema 本身的问题（`cols`）没有 `index`。可用的组件见 `znFormComponents`。
 - 未知组件（`component` 不在 `znFormComponents` 里）的字段不渲染。同时用 `console.error` 报一次，带上组件名和 path：这条在生产构建里也保留，避免只剩一个没有任何线索的空位。同一个 `ZnFormField` 实例里同一个组件名只报一次。schema 来自外部时仍应先跑 `validateZnFormSchema`，一次拿到全部问题。
 - `cols`（列数）和 `span`（占几列）只认正整数。渲染时也会兜底：非正整数按 1 算，小数向下取整，`span` 超过 `cols` 时按 `cols` 算，不会拼出 `repeat(0, minmax(0, 1fr))`、`span 2.5` 这类非法 CSS。
-- 必填时 `null`、`''`、`[]` 算未填，path 为对象时任一端为空也算。`false` 只在开关、单个勾选框这类「只有两种状态」的组件算未填；单选组、下拉里 `false` / `''` 可能是用户选中的真实选项，不会被判成未填。`ZnDateRange` 自带两条校验：只有一端有值时提示“开始和结束日期需要同时填写”，开始晚于结束时提示“开始日期不能晚于结束日期”。
+- 必填时 `undefined`、`null`、`''`、`[]` 算未填，字段上还没有这个键也算；path 为对象时任一端为空也算。`false` 只在开关、单个勾选框这类「只有两种状态」的组件算未填；单选组、下拉里 `false` / `''` 可能是用户选中的真实选项，不会被判成未填。`ZnDateRange` 自带两条校验：只有一端有值时提示“开始和结束日期需要同时填写”，开始晚于结束时提示“开始日期不能晚于结束日期”。
 - `rules` 按数据路径写。`path` 为对象（如 `{ start: 'startDate', end: 'endDate' }`）时，`ZnFormItem` 会按每个数据路径各跑一次，并把该路径的真实值交给 `validator`。这种写法只支持 `required`、`message`、`trigger`、`validator`、`level`、`key`，用了别的字段（`min`、`pattern` 等）会报错说明，不会静默通过。
 - 表单内部是就地修改 `v-model` 绑定的对象，改完会触发一次 `update:modelValue`，所以按不可变写法（每次渲染传新对象）传数据也不会丢改动。
 - `submit` 事件在校验通过后触发，参数是数据的深拷贝（保留 `Date`、`Map`、`Set`、`RegExp`、TypedArray、`File` 等类型，支持循环引用；类实例保留原型和自身可枚举属性，但依赖私有字段的实例拷出来不能用，这类值不要放进表单）；表单里按回车也会提交。实例方法有 `submit()`、`validate(paths?)`、`reset()`、`restoreValidation()`；`validate()` 校验整个表单，`validate(['endDate'])` 只校验绑定了这些数据路径的表单项，传了 `paths` 却没有表单项命中时（包括 `validate([])`）直接抛错，避免字段改名后调用方漏改时静默通过。`reset()` 把各项恢复成 `defaultValue`，没有时恢复成空值：多值字段为 `[]`，开关、勾选框为 `false`，其余为 `null`。已经是空值的字段不会被改写，多值字段也不会先变成 `null` 再由组件回写。
