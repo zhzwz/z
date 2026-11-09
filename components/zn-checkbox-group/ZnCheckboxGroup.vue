@@ -14,10 +14,18 @@ export const znCheckboxGroupProps = omit(checkboxGroupProps, [
 
 export type ZnCheckboxGroupProps = ExtractPublicPropTypes<typeof znCheckboxGroupProps>
 
+function isChoice(value: unknown): value is string | number {
+  return typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value))
+}
+
 function toCheckboxGroupValue(value: unknown) {
-  return Array.isArray(value)
+  if (!Array.isArray(value)) {
+    return []
+  }
+  // 每一项都能显示时返回原数组，避免 useDisplayedModel 反复回写。
+  return value.every(isChoice)
     ? value as (string | number)[]
-    : []
+    : value.filter(isChoice)
 }
 </script>
 

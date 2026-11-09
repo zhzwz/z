@@ -14,7 +14,7 @@ describe('<ZnSelectMulti>', () => {
       render: () => h(ZnSelectMulti, {
         modelValue: model.value as never,
         options,
-        'onUpdate:modelValue': (value: string[]) => {
+        'onUpdate:modelValue': (value: (string | number)[]) => {
           model.value = value
         },
       }),
@@ -23,13 +23,28 @@ describe('<ZnSelectMulti>', () => {
     expect(model.value).toEqual([])
   })
 
+  it('drops entries that are not a string or a finite number', async () => {
+    const model = ref<unknown>(['pending', null, Number.POSITIVE_INFINITY])
+    mount(defineComponent({
+      render: () => h(ZnSelectMulti, {
+        modelValue: model.value as never,
+        options,
+        'onUpdate:modelValue': (next: (string | number)[]) => {
+          model.value = next
+        },
+      }),
+    }))
+    await nextTick()
+    expect(model.value).toEqual(['pending'])
+  })
+
   it('keeps a value that is not in the options yet', async () => {
     const model = ref<unknown>(['pending'])
     mount(defineComponent({
       render: () => h(ZnSelectMulti, {
         modelValue: model.value as never,
         options,
-        'onUpdate:modelValue': (next: string[]) => {
+        'onUpdate:modelValue': (next: (string | number)[]) => {
           model.value = next
         },
       }),

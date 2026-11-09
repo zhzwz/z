@@ -35,13 +35,28 @@ describe('<ZnSelect>', () => {
     expect(warn).toHaveBeenCalled()
   })
 
+  it('rewrites NaN to null', async () => {
+    const model = ref<unknown>(Number.NaN)
+    mount(defineComponent({
+      render: () => h(ZnSelect, {
+        modelValue: model.value as never,
+        options,
+        'onUpdate:modelValue': (value: string | number | null) => {
+          model.value = value
+        },
+      }),
+    }))
+    await nextTick()
+    expect(model.value).toBeNull()
+  })
+
   it('keeps a value that is not in the options yet', async () => {
-    const model = ref<string | null>('pending')
+    const model = ref<string | number | null>('pending')
     mount(defineComponent({
       render: () => h(ZnSelect, {
         modelValue: model.value,
         options,
-        'onUpdate:modelValue': (value: string | null) => {
+        'onUpdate:modelValue': (value: string | number | null) => {
           model.value = value
         },
       }),

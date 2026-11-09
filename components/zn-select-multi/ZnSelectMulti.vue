@@ -23,10 +23,17 @@ export const znSelectMultiProps = {
 
 export type ZnSelectMultiProps = ExtractPublicPropTypes<typeof znSelectMultiProps>
 
+function isChoice(value: unknown): value is ZnSelectValue {
+  return typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value))
+}
+
 function toSelectMultiValue(value: unknown) {
-  return Array.isArray(value)
-    ? value as ZnSelectValue[]
-    : []
+  if (!Array.isArray(value)) {
+    return []
+  }
+  return value.every(isChoice)
+    ? value
+    : value.filter(isChoice)
 }
 </script>
 

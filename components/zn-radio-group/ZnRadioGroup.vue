@@ -18,8 +18,11 @@ export type ZnRadioGroupValue = string | number | boolean
 
 // 值不在 options 里时照常保留：options 可能异步加载。
 function toRadioGroupValue(value: unknown) {
-  return ['string', 'number', 'boolean'].includes(typeof value)
-    ? value as ZnRadioGroupValue
+  if (typeof value === 'string' || typeof value === 'boolean') {
+    return value as ZnRadioGroupValue
+  }
+  return typeof value === 'number' && Number.isFinite(value)
+    ? value
     : null
 }
 </script>

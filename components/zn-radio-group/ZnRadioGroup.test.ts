@@ -37,6 +37,12 @@ describe('<ZnRadioGroup>', () => {
     expect(warn).toHaveBeenCalled()
   })
 
+  it('rewrites NaN to null', async () => {
+    const model = mountChoice(Number.NaN)
+    await nextTick()
+    expect(model.value).toBeNull()
+  })
+
   it('keeps false, because it can be a real option', async () => {
     const data = ref<Record<string, unknown>>({ choice: false })
     const wrapper = mount(defineComponent({
@@ -47,7 +53,7 @@ describe('<ZnRadioGroup>', () => {
         },
       }, () => h(ZnFormItem, { path: 'choice', label: '是否', required: true }, () => h(ZnRadioGroup, {
         modelValue: data.value.choice as boolean,
-        'onUpdate:modelValue': (value: boolean | null) => {
+        'onUpdate:modelValue': (value: string | number | boolean | null) => {
           data.value = { ...data.value, choice: value }
         },
       }))),

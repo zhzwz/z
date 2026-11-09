@@ -29,7 +29,10 @@ export type ZnSelectProps = ExtractPublicPropTypes<typeof znSelectProps>
 export type ZnSelectValue = string | number
 
 function toSelectValue(value: unknown) {
-  return typeof value === 'string' || typeof value === 'number'
+  if (typeof value === 'string') {
+    return value
+  }
+  return typeof value === 'number' && Number.isFinite(value)
     ? value
     : null
 }

@@ -20,6 +20,20 @@ describe('<ZnCheckboxGroup>', () => {
     expect(model.value).toEqual([])
   })
 
+  it('drops entries that are not a string or a finite number', async () => {
+    const model = ref<unknown>(['read', null, Number.NaN, true])
+    mount(defineComponent({
+      render: () => h(ZnCheckboxGroup, {
+        modelValue: model.value as never,
+        'onUpdate:modelValue': (value: (string | number)[]) => {
+          model.value = value
+        },
+      }),
+    }))
+    await nextTick()
+    expect(model.value).toEqual(['read'])
+  })
+
   it('keeps an array value and does not rewrite it again', async () => {
     const model = ref<unknown>(['read'])
     mount(defineComponent({
@@ -47,7 +61,7 @@ describe('<ZnCheckboxGroup>', () => {
         },
       }, () => h(ZnFormItem, { path: 'tags', label: '标签', required: true }, () => h(ZnCheckboxGroup, {
         modelValue: data.value.tags as string[],
-        'onUpdate:modelValue': (value: string[]) => {
+        'onUpdate:modelValue': (value: (string | number)[]) => {
           data.value = { ...data.value, tags: value }
         },
       }))),
