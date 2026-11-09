@@ -3,7 +3,7 @@ import type { FormItemInst, FormItemRule } from 'naive-ui'
 import type { ExtractPublicPropTypes, PropType, VNode } from 'vue'
 import type { ZnFormItemCheck, ZnFormPath } from '../zn-form/context'
 import { formItemProps, NFormItem } from 'naive-ui'
-import { inject, onBeforeUnmount, provide, ref, useTemplateRef, watch } from 'vue'
+import { inject, onBeforeUnmount, onMounted, provide, ref, useTemplateRef, watch } from 'vue'
 import { cloneData } from '../../shared/clone'
 import { omit } from '../../shared/omit'
 import { getPath, setPath } from '../../shared/path'
@@ -38,19 +38,31 @@ const form = inject(znFormKey, null)
 const formItem = useTemplateRef<FormItemInst>('formItem')
 /** 表单项是否校验过（用户交互或提交过）；没校验过时不因外部赋值刷出红字 */
 const touched = ref(false)
+/** 本字段的空值，由字段组件声明（如开关把 false 也算空）；默认是 undefined / null / '' */
+const emptyValues = ref<readonly unknown[]>(defaultEmptyValues)
 
 function bindings() {
   const { path, defaultValue } = resolvedProps()
-  if (path === undefined) {
-    return []
-  }
   if (typeof path === 'string') {
     return [
       { dataPath: path, defaultValue },
     ]
   }
+  if (typeof path !== 'object' || path === null) {
+    return []
+  }
   const defaults = (defaultValue ?? {}) as Record<string, unknown>
-  return Object.entries(path).map(([model, dataPath]) => ({ dataPath, defaultValue: defaults[model] }))
+  return Object.entries(path).flatMap(([model, dataPath]) => {
+    if (typeof dataPath !== 'string') {
+      return []
+    }
+    return [
+      {
+        dataPath,
+        defaultValue: defaults[model],
+      },
+    ]
+  })
 }
 
 /** 没有 defaultValue 时按字段当前的形状取空值：多值为 []、开关为 false，其余为 null */
@@ -69,26 +81,36 @@ function fillDefaults(onlyEmpty: boolean) {
   if (!model) {
     return
   }
+  let changed = false
   for (const { dataPath, defaultValue } of bindings()) {
     const current = getPath(model, dataPath)
+    const empty = isEmptyValue(current, emptyValues.value)
     if (defaultValue === undefined) {
       // 挂载时（onlyEmpty）没有 defaultValue 的字段一概不动，否则会把初始数据清掉。
       // 重置时只把有值的字段恢复成空值：原本就是空的保持原样，'' 不会被改成 null。
-      if (!onlyEmpty && !isEmptyValue(current)) {
-        setPath(model, dataPath, toEmptyValue(current))
+      if (!onlyEmpty && !empty) {
+        changed = writePath(model, dataPath, current, toEmptyValue(current)) || changed
       }
       continue
     }
-    if (!onlyEmpty || isEmptyValue(current)) {
+    if (!onlyEmpty || empty) {
       // 深拷贝：defaultValue 常来自共享的 schema，直接赋引用会让多行数据共用一个对象，
       // 改一行连带改另一行，还会反向污染 schema 本身。
-      setPath(model, dataPath, cloneData(defaultValue))
+      changed = writePath(model, dataPath, current, cloneData(defaultValue)) || changed
     }
   }
-  form?.notifyChange()
+  if (changed) {
+    form?.notifyChange()
+  }
 }
 
-fillDefaults(true)
+function writePath(model: Record<string, unknown>, dataPath: string, current: unknown, next: unknown) {
+  if (Object.is(current, next)) {
+    return false
+  }
+  setPath(model, dataPath, next)
+  return true
+}
 
 if (form) {
   let unregister: (() => void) | undefined
@@ -118,8 +140,11 @@ if (form) {
 }
 
 const checks = new Set<ZnFormItemCheck>()
-/** 本字段的空值，由字段组件声明（如开关把 false 也算空）；默认是 undefined / null / '' */
-const emptyValues = ref<readonly unknown[]>(defaultEmptyValues)
+
+// 子组件在自己的 setup 里声明空值，晚于这次调用。先按默认空值填一遍，挂载后再补一次，
+// 这样开关的 false 也能吃到 defaultValue，服务端渲染时第一遍已经写好，不会和客户端首次渲染错开。
+fillDefaults(true)
+onMounted(() => fillDefaults(true))
 
 provide(znFormItemKey, {
   addCheck(check) {
@@ -143,16 +168,17 @@ const builtinRule: FormItemRule = {
     touched.value = true
     const { label, required, path } = resolvedProps()
     const model = form?.model() ?? {}
-    if (required && toDataPaths(path).some(dataPath => isEmptyValue(getPath(model, dataPath), emptyValues.value))) {
-      return new Error(label
-        ? `${label}不能为空`
-        : '不能为空')
-    }
+    // 组件自带的校验更具体（如日期范围只有一端），要先于「不能为空」，否则必填会把它盖掉。
     for (const check of checks) {
       const message = check()
       if (message) {
         return new Error(message)
       }
+    }
+    if (required && toDataPaths(path).some(dataPath => isEmptyValue(getPath(model, dataPath), emptyValues.value))) {
+      return new Error(label
+        ? `${label}不能为空`
+        : '不能为空')
     }
     return true
   },
@@ -171,43 +197,130 @@ function nFormItemProps() {
  * 只认 `required` / `validator` 两种写法：其余写法（`min`、`pattern`、`type` 等）由 async-validator 实现，
  * 在这里无法完整复刻，遇到时直接报错说明，避免又一次静默通过。
  */
-function objectPathRule(): FormItemRule {
-  return {
-    trigger: ['input', 'change', 'blur'],
-    async validator() {
-      const { path } = resolvedProps()
-      const all = form?.rules()
-      if (typeof path !== 'object' || path === null || !all) {
+/**
+ * 按 naive / async-validator 的两种写法收结果。
+ * 返回 Error、false、Error[] 算失败；Promise 兑现算通过（兑现的值不再解读），拒绝算失败。
+ * 声明了 callback 又没有返回值时，等到 callback 被调用再收结果，包括函数返回之后才调用的情况。
+ * 没有声明 callback、也没有返回值时视为通过。声明了却既不返回也不调用时会一直等，和 async-validator 一样。
+ */
+async function runValidator(rule: FormItemRule, value: unknown, dataPath: string) {
+  const validate = rule.validator
+  if (!validate) {
+    return
+  }
+  await new Promise<void>((resolve, reject) => {
+    let settled = false
+    const finish = (error?: Error) => {
+      if (settled) {
         return
       }
-      const dataPaths = Object.values(path)
-      const model = form?.model() ?? {}
-      for (const dataPath of dataPaths) {
-        for (const rule of toRuleList(getPath(all, dataPath))) {
-          const value = getPath(model, dataPath)
-          const unsupported = Object.keys(rule).filter(key => !supportedRuleKeys.has(key))
-          if (unsupported.length > 0) {
-            throw new Error(`[ZnForm] path 为对象时，${dataPath} 的规则只支持 ${[...supportedRuleKeys].join('、')}，收到 ${unsupported.join('、')}；其余写法请改用 validator。`)
-          }
+      settled = true
+      if (error) {
+        reject(error)
+      } else {
+        resolve()
+      }
+    }
+    const finishCallback = (error?: unknown) => {
+      const value = Array.isArray(error)
+        ? error[0]
+        : error
+      if (value instanceof Error) {
+        finish(value)
+        return
+      }
+      if (typeof value === 'string' && value) {
+        finish(new Error(value))
+        return
+      }
+      finish()
+    }
+    const finishReturn = (returned: unknown) => {
+      if (returned === false) {
+        finish(new Error(ruleMessage(rule, dataPath)))
+        return
+      }
+      const value = Array.isArray(returned)
+        ? returned[0]
+        : returned
+      finish(value instanceof Error
+        ? value
+        : undefined)
+    }
+    let returned: unknown
+    try {
+      returned = validate(rule, value, finishCallback, {}, {} as never)
+    } catch (error) {
+      finish(error instanceof Error
+        ? error
+        : new Error(String(error)))
+      return
+    }
+    if (settled) {
+      return
+    }
+    if (isThenable(returned)) {
+      returned.then(() => finish(), (error: unknown) => {
+        finish(error instanceof Error
+          ? error
+          : new Error(String(error)))
+      })
+      return
+    }
+    if (returned === undefined && validate.length < 3) {
+      finish()
+      return
+    }
+    if (returned !== undefined) {
+      finishReturn(returned)
+    }
+  })
+}
+
+function isThenable(value: unknown): value is Promise<unknown> {
+  return typeof (value as Promise<unknown> | null)?.then === 'function'
+}
+
+/**
+ * 每条原始规则单独交给 NFormItem，才能保留它自己的 trigger 和 level。
+ * 合成一条总规则的话，blur 规则会在 input 时跑，warning 也会变成 error。
+ */
+function objectPathRules(): FormItemRule[] {
+  const { path } = resolvedProps()
+  const all = form?.rules()
+  if (typeof path !== 'object' || path === null || !all) {
+    return []
+  }
+  const model = () => form?.model() ?? {}
+  return Object.values(path).flatMap((dataPath) => {
+    if (typeof dataPath !== 'string') {
+      return []
+    }
+    return toRuleList(getPath(all, dataPath)).map((rule) => {
+      const unsupported = Object.keys(rule).filter(key => !supportedRuleKeys.has(key))
+      if (unsupported.length > 0) {
+        return {
+          trigger: rule.trigger ?? ['input', 'change', 'blur'],
+          // 返回 Error 而不是抛出：naive 会把校验函数里的同步异常吞掉，规则就静默通过了。
+          validator() {
+            return new Error(`[ZnForm] path 为对象时，${dataPath} 的规则只支持 ${[...supportedRuleKeys].join('、')}，收到 ${unsupported.join('、')}；其余写法请改用 validator。`)
+          },
+        }
+      }
+      return {
+        key: rule.key,
+        level: rule.level,
+        trigger: rule.trigger ?? ['input', 'change', 'blur'],
+        async validator() {
+          const value = getPath(model(), dataPath)
           if (rule.required && isEmptyValue(value, emptyValues.value)) {
             throw new Error(ruleMessage(rule, dataPath))
           }
-          if (rule.validator) {
-            const result = await rule.validator(rule, value, () => {}, {}, {} as never)
-            const error = Array.isArray(result)
-              ? result[0]
-              : result
-            if (error instanceof Error) {
-              throw error
-            }
-            if (result === false) {
-              throw new Error(ruleMessage(rule, dataPath))
-            }
-          }
-        }
+          await runValidator(rule, value, dataPath)
+        },
       }
-    },
-  }
+    })
+  })
 }
 
 /** 规则的 `message` 允许写成函数，统一取成字符串 */
@@ -245,15 +358,10 @@ function requiredMessage(dataPath: string) {
 }
 
 function itemRules() {
-  const path = resolvedProps().path
   return [
     builtinRule,
     ...(resolvedProps().rules ?? []),
-    ...(typeof path === 'object' && path !== null
-      ? [
-          objectPathRule(),
-        ]
-      : []),
+    ...objectPathRules(),
   ]
 }
 

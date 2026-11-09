@@ -66,9 +66,15 @@ function modelBindings() {
     ? [
         ['modelValue', path],
       ]
-    : Object.entries(path)
+    : typeof path === 'object' && path !== null
+      ? Object.entries(path)
+      : []
   const bindings: Record<string, unknown> = {}
   for (const [name, dataPath] of models) {
+    // path 来自外部配置，值可能不是字符串。getPath 只接受字符串，跳过这一端，避免整张表渲染中断。
+    if (typeof dataPath !== 'string') {
+      continue
+    }
     bindings[name] = getPath(model, dataPath)
     bindings[`onUpdate:${name}`] = (value: unknown) => {
       setPath(model, dataPath, value)

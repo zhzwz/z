@@ -64,7 +64,7 @@
    - 新的字段组件要在 `zn-form/components.ts` 的 `znFormComponents` 登记，有具名 v-model 的写明 `models`；`validateZnFormSchema` 和设计器都依赖这份登记。未登记的组件名在 `ZnFormField` 里不渲染，并用 `console.error` 报一次（生产环境也保留，便于定位空字段）。
    - 必填按空值判断：默认 `null`、`undefined`、`''`、`[]`。`false` 只在「只有两种状态」的字段（开关、单个勾选框）算未填——单选组、下拉里 `false` / `''` 可能是用户选中的真实选项，判空会误报。字段组件用 `zn-form/context.ts` 的 `useZnFormItemEmptyValues` 声明自己的空值。path 为对象时任一端为空即未填。
    - `ZnForm` 内部是就地改 `modelValue`，改完通过 `update:modelValue` 交回使用方（`znFormKey` 的 `notifyChange`）：使用方按不可变写法（每次传新对象）传数据时改动才不会丢。新增写入 model 的路径都要调它。
-   - `path` 为对象时 naive 查不到 `ZnForm` 的 `rules`（它按 `path` 取值，而对象 path 交上去的是 `from,to` 这样的拼接串），`ZnFormItem` 自己按数据路径逐条跑，并把真实值交给 `validator`。只支持 `required` / `message` / `trigger` / `validator` / `level` / `key`，其余写法直接报错说明，不再静默通过。
+   - `path` 为对象时 naive 查不到 `ZnForm` 的 `rules`（它按 `path` 取值，而对象 path 交上去的是 `from,to` 这样的拼接串），`ZnFormItem` 自己按数据路径逐条跑，并把真实值交给 `validator`。只支持 `required` / `message` / `trigger` / `validator` / `level` / `key`，其余写法直接报错说明，不再静默通过。`validator` 可以返回结果，也可以调用 callback；声明了 callback 又没有返回值时，会等到 callback 被调用，包括函数返回之后才调用的情况。
    - `defaultValue` 的填充与 `reset()` 用同一套空值判断；没有 `defaultValue` 时按字段形状填空值（多值 `[]`、开关 `false`、其余 `null`），已经是空值的字段不改写。填充只在 `reset()` 时做；挂载时只补 `defaultValue`（字段为空才填），不改动任何已有数据。
    - path 来自外部配置，可能不可信：`shared/path.ts` 的 `getPath` / `setPath` 只读写对象自身的属性，并跳过 `__proto__`、`constructor`、`prototype`，`validateZnFormSchema` 把这类 path 报成 issue。改这两处时不要退回直接下标访问。
    - 列数相关的值（`cols`、`span`）只认正整数，渲染时用 `context.ts` 的 `toColumnCount` 兜底，不要直接拼进 CSS：`0` 会得到 `repeat(0, ...)`，小数会得到 `span 2.5`。

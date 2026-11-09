@@ -63,6 +63,20 @@ describe('<ZnFormField>', () => {
     error.mockClear()
   })
 
+  it('does not throw when path is null', async () => {
+    mountField({ component: 'ZnInput', path: null })
+    await nextTick()
+  })
+
+  it('does not throw when an object path value is not a string', async () => {
+    const wrapper = mountField({
+      component: 'ZnDateRange',
+      path: { start: 1, end: 'to' },
+    })
+    await nextTick()
+    expect(wrapper.find('.n-form-item').exists()).toBe(true)
+  })
+
   it('stays silent for a known component', async () => {
     mountField({ component: 'ZnInput', path: 'name' })
     await nextTick()

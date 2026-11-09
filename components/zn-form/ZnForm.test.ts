@@ -284,6 +284,104 @@ describe('<ZnForm> rules on an object path', () => {
     wrapper.unmount()
   })
 
+  it('reads an error passed to the validator callback', async () => {
+    const wrapper = mountRange({ from: 'abc', to: null }, {
+      from: {
+        validator: (_rule, _value, callback) => {
+          callback(new Error('回调报错'))
+        },
+      },
+    })
+    await nextTick()
+
+    await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(false)
+    await nextTick()
+    expect(wrapper.text()).toContain('回调报错')
+    wrapper.unmount()
+  })
+
+  it('waits for an error passed to the validator callback after the function returns', async () => {
+    const wrapper = mountRange({ from: 'abc', to: null }, {
+      from: {
+        validator: (_rule, _value, callback) => {
+          setTimeout(() => callback(new Error('晚一点报错')))
+        },
+      },
+    })
+    await nextTick()
+
+    await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(false)
+    await nextTick()
+    expect(wrapper.text()).toContain('晚一点报错')
+    wrapper.unmount()
+  })
+
+  it('passes when a validator neither returns nor takes a callback', async () => {
+    const wrapper = mountRange({ from: 'abc', to: null }, {
+      from: {
+        validator: () => {},
+      },
+    })
+    await nextTick()
+
+    await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(true)
+    wrapper.unmount()
+  })
+
+  it('rejects when the validator promise rejects', async () => {
+    const wrapper = mountRange({ from: 'abc', to: null }, {
+      from: {
+        validator: () => Promise.reject(new Error('异步失败')),
+      },
+    })
+    await nextTick()
+
+    await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(false)
+    await nextTick()
+    expect(wrapper.text()).toContain('异步失败')
+    wrapper.unmount()
+  })
+
+  it('does not run a blur-only rule while the field is still being edited', async () => {
+    let runs = 0
+    const wrapper = mountRange({ from: 'abc', to: 'def' }, {
+      from: {
+        trigger: ['blur'],
+        validator() {
+          runs += 1
+          return new Error('失焦才报')
+        },
+      },
+    })
+    await nextTick()
+
+    await wrapper.find('input').setValue('xyz')
+    await nextTick()
+    expect(runs).toBe(0)
+    expect(wrapper.text()).not.toContain('失焦才报')
+
+    await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(false)
+    await nextTick()
+    expect(runs).toBeGreaterThan(0)
+    expect(wrapper.text()).toContain('失焦才报')
+    wrapper.unmount()
+  })
+
+  it('shows a warning without blocking submit', async () => {
+    const wrapper = mountRange({ from: 'abc', to: 'def' }, {
+      from: {
+        level: 'warning',
+        validator: () => new Error('只是提醒'),
+      },
+    })
+    await nextTick()
+
+    await expect(wrapper.findComponent(ZnForm).vm.submit()).resolves.toBe(true)
+    await nextTick()
+    expect(wrapper.text()).toContain('只是提醒')
+    wrapper.unmount()
+  })
+
   it('reports rule shapes it cannot run instead of passing silently', async () => {
     const wrapper = mountRange({ from: 'a', to: null }, {
       from: { min: 3, message: '太短' },

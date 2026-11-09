@@ -7,23 +7,28 @@ import { inject, onBeforeUnmount } from 'vue'
  */
 export type ZnFormPath = string | Record<string, string>
 
+function isPathRecord(path: ZnFormPath | undefined): path is Record<string, string> {
+  return typeof path === 'object' && path !== null
+}
+
 export function toDataPaths(path: ZnFormPath | undefined): string[] {
-  if (path === undefined) {
-    return []
+  if (typeof path === 'string') {
+    return [path]
   }
-  return typeof path === 'string'
-    ? [path]
-    : Object.values(path)
+  // schema 来自外部配置，path 可能是 null；这里不能抛，否则整张表渲染中断。
+  return isPathRecord(path)
+    ? Object.values(path)
+    : []
 }
 
 /** 交给 NFormItem 的 path：多个数据路径时拼成一个不会命中数据的标识，取值由 ZnFormItem 自己完成 */
 export function toItemPath(path: ZnFormPath | undefined): string | undefined {
-  if (path === undefined) {
-    return undefined
+  if (typeof path === 'string') {
+    return path
   }
-  return typeof path === 'string'
-    ? path
-    : Object.values(path).join(',')
+  return isPathRecord(path)
+    ? Object.values(path).join(',')
+    : undefined
 }
 
 /**

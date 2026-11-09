@@ -6,6 +6,8 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import { ZnConfigProvider } from '../zn-config-provider'
 import { ZnForm } from '../zn-form'
 import { useZnFormItemEmptyValues } from '../zn-form/context'
+import { ZnRadioGroup } from '../zn-radio-group'
+import { ZnSwitch } from '../zn-switch'
 import ZnFormItem from './ZnFormItem.vue'
 
 function mountForm(defaults?: ZnDefaults, itemProps: Record<string, unknown> = {}) {
@@ -212,6 +214,52 @@ describe('<ZnFormItem> defaultValue', () => {
     expect(rows[0]).toMatchObject({ from: '2024-01-01', to: '2024-01-02' })
     expect(rows[0]).not.toBe(shared)
     wrapper.unmount()
+  })
+
+  it('fills a switch default over false once the switch has declared false as empty', async () => {
+    const model = ref<Record<string, unknown>>({ on: false })
+    mount(defineComponent({
+      render: () => h(ZnForm, {
+        modelValue: model.value,
+        'onUpdate:modelValue': (value: Record<string, unknown>) => {
+          model.value = value
+        },
+      }, () => h(ZnFormItem, {
+        path: 'on',
+        defaultValue: true,
+      }, () => h(ZnSwitch, {
+        modelValue: model.value.on as boolean,
+        'onUpdate:modelValue': (value: boolean) => {
+          model.value = { ...model.value, on: value }
+        },
+      }))),
+    }))
+    await nextTick()
+
+    expect(model.value.on).toBe(true)
+  })
+
+  it('keeps a real false when the field has not declared it as empty', async () => {
+    const model = ref<Record<string, unknown>>({ choice: false })
+    mount(defineComponent({
+      render: () => h(ZnForm, {
+        modelValue: model.value,
+        'onUpdate:modelValue': (value: Record<string, unknown>) => {
+          model.value = value
+        },
+      }, () => h(ZnFormItem, {
+        path: 'choice',
+        defaultValue: 'yes',
+      }, () => h(ZnRadioGroup, {
+        modelValue: model.value.choice as boolean,
+        'onUpdate:modelValue': (value: string | number | boolean | null) => {
+          model.value = { ...model.value, choice: value }
+        },
+      }))),
+    }))
+    await nextTick()
+
+    expect(model.value.choice).toBe(false)
   })
 
   it('does not write into the default value when the model is edited', async () => {
