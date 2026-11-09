@@ -14,7 +14,6 @@ const importDist = (fileName: string) => import(distUrl(fileName).href)
 const componentDependencies: Record<string, string[]> = {
   'z-button': ['vue'],
   'z-flex': ['vue'],
-  'z-flex-col': ['vue'],
   'z-icon': ['@iconify/vue', 'vue'],
   'zn-button': ['@iconify/vue', 'naive-ui', 'vue'],
   'zn-checkbox': ['naive-ui', 'vue'],

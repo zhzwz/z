@@ -38,7 +38,7 @@ import '@zhzwz/z/style.css'
 
 | 组件                                                                                                                                                   | 需要安装的依赖                                |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------- |
-| `ZButton`、`ZFlex`、`ZFlexCol`                                                                                                                         | `vue`                                         |
+| `ZButton`、`ZFlex`                                                                                                                                     | `vue`                                         |
 | `ZIcon`                                                                                                                                                | `vue`、`@iconify/vue`                         |
 | `ZnButton`、`ZnSelect`、`ZnSelectMulti`                                                                                                                | `vue`、`naive-ui`、`@iconify/vue`             |
 | `ZnDate`、`ZnDateTime`、`ZnDateRange`                                                                                                                  | `vue`、`naive-ui`、`date-fns`                 |

@@ -9,7 +9,6 @@ import type { ZnInputProps } from '@zhzwz/z/components/zn-input'
 import type { ZnSelectOption, ZnSelectProps, ZnSelectValue } from '@zhzwz/z/components/zn-select'
 import { ZButton } from '@zhzwz/z/components/z-button'
 import { ZFlex } from '@zhzwz/z/components/z-flex'
-import { ZFlexCol } from '@zhzwz/z/components/z-flex-col'
 import { ZIcon } from '@zhzwz/z/components/z-icon'
 import { ZnButton } from '@zhzwz/z/components/zn-button'
 import { ZnCheckbox } from '@zhzwz/z/components/zn-checkbox'
@@ -33,7 +32,6 @@ import { ZnTextarea } from '@zhzwz/z/components/zn-textarea'
 export const components = [
   ZButton,
   ZFlex,
-  ZFlexCol,
   ZIcon,
   ZnButton,
   ZnCheckbox,

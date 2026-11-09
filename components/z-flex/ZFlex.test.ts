@@ -36,6 +36,14 @@ describe('<ZFlex>', () => {
       slots: { default: 'content' },
     })
     expect(wrapper.text()).toBe('content')
+    expect(wrapper.classes()).not.toContain('z-flex--column')
+  })
+
+  it('lays out in a column when column is set', () => {
+    const wrapper = mount(ZFlex, {
+      props: { column: true },
+    })
+    expect(wrapper.classes()).toContain('z-flex--column')
   })
 
   it('converts a numeric gap to rem and keeps a string gap as is', () => {
