@@ -70,4 +70,4 @@ Nuxt 里写成 `build.transpile: ['@zhzwz/z']`。
 
 ## 关于这个文档站
 
-左侧导航由 `src/content/docs/` 下的文件生成，新增一个页面就会出现在导航里。组件页里的示例是 `src/demos/` 下独立的 `.vue` 文件，页面直接引用它，并把源码显示在示例下方。
+左侧导航由 `src/content/docs/` 下的文件生成，新增一个页面就会出现在导航里。组件页里的示例是 `src/demos/` 下独立的 `.vue` 文件，页面直接引用它，并把源码显示在示例下方。文档站接了上面的自动引入，并加上 naive-ui 的 `NaiveUiResolver`，所以示例源码里没有组件 import。

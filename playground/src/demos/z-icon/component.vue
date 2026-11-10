@@ -1,6 +1,5 @@
 <!-- 传入组件，如 unplugin-icons 生成的图标 -->
 <script setup lang="ts">
-import { ZIcon } from '@zhzwz/z/components/z-icon'
 import { h } from 'vue'
 
 function IconDot() {

@@ -1,9 +1,6 @@
 <!-- schema 渲染同样的字段，外面调用 submit() -->
 <script setup lang="ts">
 import type { ZnFormData, ZnFormSchema } from '@zhzwz/z/components/zn-form'
-import { ZnButton } from '@zhzwz/z/components/zn-button'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnForm } from '@zhzwz/z/components/zn-form'
 import { ref, useTemplateRef } from 'vue'
 
 const form = useTemplateRef('form')

@@ -1,8 +1,5 @@
 <!-- 单选，没有选中时是 null -->
 <script setup lang="ts">
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnRadioGroup } from '@zhzwz/z/components/zn-radio-group'
-import { NRadio } from 'naive-ui'
 import { ref } from 'vue'
 
 const choice = ref<string | null>(null)

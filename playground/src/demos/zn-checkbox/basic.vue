@@ -1,7 +1,5 @@
 <!-- 单个勾选框 -->
 <script setup lang="ts">
-import { ZnCheckbox } from '@zhzwz/z/components/zn-checkbox'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 import { ref } from 'vue'
 
 const agreed = ref(false)

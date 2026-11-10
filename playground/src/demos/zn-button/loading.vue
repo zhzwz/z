@@ -1,7 +1,5 @@
 <!-- 点击后进入加载状态 -->
 <script setup lang="ts">
-import { ZnButton } from '@zhzwz/z/components/zn-button'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 import { ref } from 'vue'
 
 const loading = ref(false)

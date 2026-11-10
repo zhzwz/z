@@ -1,8 +1,4 @@
 <!-- 间距与对齐 -->
-<script setup lang="ts">
-import { ZFlex } from '@zhzwz/z/components/z-flex'
-</script>
-
 <template>
   <div class="stack panel">
     <ZFlex gap="12px" place="between center">

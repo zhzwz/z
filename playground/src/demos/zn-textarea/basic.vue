@@ -1,7 +1,5 @@
 <!-- 多行文本 -->
 <script setup lang="ts">
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnTextarea } from '@zhzwz/z/components/zn-textarea'
 import { ref } from 'vue'
 
 const note = ref<string | null>(null)

@@ -1,12 +1,6 @@
 <!-- 模板里写表单项 -->
 <script setup lang="ts">
 import type { ZnFormData } from '@zhzwz/z/components/zn-form'
-import { ZnButton } from '@zhzwz/z/components/zn-button'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnDateRange } from '@zhzwz/z/components/zn-date-range'
-import { ZnForm } from '@zhzwz/z/components/zn-form'
-import { ZnFormItem } from '@zhzwz/z/components/zn-form-item'
-import { ZnInput } from '@zhzwz/z/components/zn-input'
 import { ref } from 'vue'
 
 const data = ref({

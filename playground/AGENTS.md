@@ -1,6 +1,6 @@
 # 文档站
 
-用 Astro 搭的组件文档，`pnpm dev` 启动，端口 11105。改组件后文档实时更新，演示代码按包名引入但指向仓库源码，不必先构建。
+用 Astro 搭的组件文档，`pnpm dev` 启动，端口 11105。改组件后文档实时更新。演示里的组件由 unplugin 按包名自动引入，这些包名指向仓库源码，不必先构建。
 
 ## 目录
 
@@ -9,6 +9,7 @@ src/
   content/docs/     文档页面（MDX），决定路由与侧边栏
   demos/            演示用的 Vue 组件，一个示例一个文件
   components/       Demo、ApiTable 等文档站的 Astro 组件
+  components.d.ts   unplugin 生成的全局组件类型，要提交
   layouts/          页面布局
   meta.ts           读组件源码生成接口表、按组件身份查找示例源码
   nav.ts            由文档页面生成侧边栏
@@ -20,10 +21,6 @@ src/
 
    ```vue
    <!-- 主题色与朴素按钮 -->
-   <script setup lang="ts">
-   import { ZnButton } from '@zhzwz/z/components/zn-button'
-   </script>
-
    <template>
      <div class="row">
        <ZnButton type="primary">主要</ZnButton>
@@ -31,7 +28,7 @@ src/
    </template>
    ```
 
-   布局辅助类（`.row`、`.icons`）在 `src/styles/demo.css` 里。
+   组件不用写 import：`astro.config.ts` 用 `unplugin-vue-components` 接了 `ZResolver` 和 `NaiveUiResolver`，模板里的组件名会按需引入。`vue` 的函数和 `import type` 仍要手写。用到新组件后跑一次 dev 或 build，把更新的 `src/components.d.ts` 提交。布局辅助类（`.row`、`.icons`）在 `src/styles/demo.css` 里。
 
 演示里如果用 naive-ui 的组件（`Zn*` 也算），要用 `ZnConfigProvider` 包一层。它会读 `<html data-z-theme>`，naive-ui 因此跟随站点深浅色。页面上改用 `client:only="vue"`：它默认 `inlineThemeDisabled`，服务端渲染时 naive-ui 会访问 `document`。
 

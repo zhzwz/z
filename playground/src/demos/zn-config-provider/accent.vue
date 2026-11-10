@@ -1,9 +1,6 @@
 <!-- 改 <html data-z-accent>，整页强调色跟着变 -->
 <script setup lang="ts">
 import { zAccentSteps } from '@zhzwz/z/accent'
-import { ZnAccentSwitch } from '@zhzwz/z/components/zn-accent-switch'
-import { ZnButton } from '@zhzwz/z/components/zn-button'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 </script>
 
 <template>

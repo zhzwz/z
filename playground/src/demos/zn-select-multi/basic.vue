@@ -1,8 +1,6 @@
 <!-- 下拉多选，没有选中时是空数组 -->
 <script setup lang="ts">
 import type { ZnSelectOption } from '@zhzwz/z/components/zn-select'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnSelectMulti } from '@zhzwz/z/components/zn-select-multi'
 import { ref } from 'vue'
 
 const value = ref<string[]>([])

@@ -1,8 +1,6 @@
 <!-- 下拉单选，选项可以带图标 -->
 <script setup lang="ts">
 import type { ZnSelectOption } from '@zhzwz/z/components/zn-select'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnSelect } from '@zhzwz/z/components/zn-select'
 import { ref } from 'vue'
 
 const value = ref<string | null>(null)

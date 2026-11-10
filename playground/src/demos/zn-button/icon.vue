@@ -1,9 +1,4 @@
 <!-- icon 与 label 两个 prop，只有图标时必须给可访问名称 -->
-<script setup lang="ts">
-import { ZnButton } from '@zhzwz/z/components/zn-button'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-</script>
-
 <template>
   <ZnConfigProvider>
     <div class="row">

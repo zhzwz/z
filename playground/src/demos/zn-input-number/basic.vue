@@ -1,7 +1,5 @@
 <!-- 数字，没有值时是 null -->
 <script setup lang="ts">
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnInputNumber } from '@zhzwz/z/components/zn-input-number'
 import { ref } from 'vue'
 
 const count = ref<number | null>(1)

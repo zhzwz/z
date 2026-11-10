@@ -1,7 +1,5 @@
 <!-- 日期存成 yyyy-MM-dd -->
 <script setup lang="ts">
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnDate } from '@zhzwz/z/components/zn-date'
 import { ref } from 'vue'
 
 const day = ref<string | null>('2024-01-01')

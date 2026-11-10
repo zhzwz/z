@@ -1,9 +1,4 @@
 <!-- 内置默认值，以及显式 props 优先 -->
-<script setup lang="ts">
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnInput } from '@zhzwz/z/components/zn-input'
-</script>
-
 <template>
   <ZnConfigProvider :defaults="{ ZnInput: { clearable: false } }">
     <div class="stack panel">

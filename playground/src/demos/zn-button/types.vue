@@ -1,9 +1,4 @@
 <!-- 主题色与朴素按钮 -->
-<script setup lang="ts">
-import { ZnButton } from '@zhzwz/z/components/zn-button'
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-</script>
-
 <template>
   <ZnConfigProvider>
     <div class="row">

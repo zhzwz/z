@@ -1,7 +1,5 @@
 <!-- 单行文本，清空后写成 null -->
 <script setup lang="ts">
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnInput } from '@zhzwz/z/components/zn-input'
 import { ref } from 'vue'
 
 const name = ref<string | null>('示例')

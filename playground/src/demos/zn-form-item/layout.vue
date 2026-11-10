@@ -1,10 +1,5 @@
 <!-- 占列、必填和说明 -->
 <script setup lang="ts">
-import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
-import { ZnForm } from '@zhzwz/z/components/zn-form'
-import { ZnFormItem } from '@zhzwz/z/components/zn-form-item'
-import { ZnInput } from '@zhzwz/z/components/zn-input'
-import { ZnTextarea } from '@zhzwz/z/components/zn-textarea'
 import { ref } from 'vue'
 
 const data = ref({
