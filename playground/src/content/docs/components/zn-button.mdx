@@ -17,19 +17,19 @@ import Slots from '@/demos/zn-button/slots.vue'
 ## 类型
 
 <Demo of={Types}>
-  <Types client:visible />
+  <Types client:only="vue" />
 </Demo>
 
 ## 尺寸与形状
 
 <Demo of={Size}>
-  <Size client:visible />
+  <Size client:only="vue" />
 </Demo>
 
 ## 加载状态
 
 <Demo of={Loading}>
-  <Loading client:visible />
+  <Loading client:only="vue" />
 </Demo>
 
 ## 带图标
@@ -37,7 +37,7 @@ import Slots from '@/demos/zn-button/slots.vue'
 只有图标、没有文字的按钮必须提供 `aria-label`、`aria-labelledby` 或 `title`，否则开发环境会警告。这类按钮会自动收成正方形。
 
 <Demo of={Icon}>
-  <Icon client:visible />
+  <Icon client:only="vue" />
 </Demo>
 
 ## 插槽
@@ -45,7 +45,7 @@ import Slots from '@/demos/zn-button/slots.vue'
 props 和插槽提供同样的内容时插槽优先：`#icon` 优先于 `icon`，默认插槽优先于 `label`。
 
 <Demo of={Slots}>
-  <Slots client:visible />
+  <Slots client:only="vue" />
 </Demo>
 
 ## 接口

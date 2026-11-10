@@ -1,4 +1,6 @@
 export type { ZnComponentProps, ZnConfig, ZnDefaults } from './config'
 export { useZnConfig } from './config'
+export type { ZnThemeChoice } from './theme'
+export { isZnThemeChoice, readZnTheme, setZnTheme } from './theme'
 export type { ZnConfigProviderProps } from './ZnConfigProvider.vue'
 export { znBuiltinDefaults, default as ZnConfigProvider } from './ZnConfigProvider.vue'

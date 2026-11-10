@@ -4,7 +4,6 @@ import type { ZnSelectOption } from '@zhzwz/z/components/zn-select'
 import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 import { ZnSelectMulti } from '@zhzwz/z/components/zn-select-multi'
 import { ref } from 'vue'
-import NaiveTheme from '@/components/NaiveTheme.vue'
 
 const value = ref<string[]>([])
 const options: ZnSelectOption[] = [
@@ -16,13 +15,11 @@ const options: ZnSelectOption[] = [
 
 <template>
   <ZnConfigProvider>
-    <NaiveTheme>
-      <div class="stack panel">
-        <ZnSelectMulti v-model="value" :options="options" />
-        <p class="note">
-          {{ JSON.stringify(value) }}
-        </p>
-      </div>
-    </NaiveTheme>
+    <div class="stack panel">
+      <ZnSelectMulti v-model="value" :options="options" />
+      <p class="note">
+        {{ JSON.stringify(value) }}
+      </p>
+    </div>
   </ZnConfigProvider>
 </template>

@@ -49,7 +49,7 @@ Nuxt 里写成 `build.transpile: ['@zhzwz/z']`。
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------- |
 | `ZFlex`                                                                                                                                                | `vue`                                         |
 | `ZIcon`                                                                                                                                                | `vue`、`@iconify/vue`                         |
-| `ZnButton`、`ZnSelect`、`ZnSelectMulti`                                                                                                                | `vue`、`naive-ui`、`@iconify/vue`             |
+| `ZnAccentPanel`、`ZnAccentSwitch`、`ZnButton`、`ZnSelect`、`ZnSelectMulti`                                                                             | `vue`、`naive-ui`、`@iconify/vue`             |
 | `ZnDate`、`ZnDateTime`、`ZnDateRange`                                                                                                                  | `vue`、`naive-ui`、`date-fns`                 |
 | `ZnForm`、`ZnFormField`                                                                                                                                | `vue`、`naive-ui`、`date-fns`、`@iconify/vue` |
 | `ZnCheckbox`、`ZnCheckboxGroup`、`ZnConfigProvider`、`ZnFormItem`、`ZnInput`、`ZnInputNumber`、`ZnRadioGroup`、`ZnScrollbar`、`ZnSwitch`、`ZnTextarea` | `vue`、`naive-ui`                             |
@@ -116,6 +116,8 @@ const schema: ZnFormSchema = {
 用 `ZnConfigProvider` 包住应用。它包了一层 naive 的 `NConfigProvider`，props 全部透传，另外：
 
 - 默认使用中文语言包（`zhCN`、`dateZhCN`），`abstract` 和 `inlineThemeDisabled` 默认开启。
+- 最外层没传 `theme` 时，读 `<html data-z-theme>`（`light`、`dark`、`auto`；没写按 `auto`，跟随系统配色）。传了 `theme` 就用传入的值，`null` 表示浅色。切换用 `setZnTheme()`。要避免首屏闪一下浅色，在 head 里同步写上这个属性。
+- 强调色只看 `<html data-z-accent>`（`blue`、`cyan`、`orange`）。没写或不认识时，最外层 `ZnConfigProvider` 写成默认的 `blue`。`ZnAccentPanel`、`ZnAccentSwitch` 和 `setZAccent()` 都只改这个属性。每套从 `50` 到 `950` 共 11 阶，色值是 Tailwind 的 OKLCH，页面里用 `var(--z-theme-accent-500)` 这类变量。naive 的主色从这套里取：亮色按钮用 `600`，悬停 `500`，按下 `700`；暗色按钮用 `400`。`themeOverrides.common` 里写了的 primary 色优先。色阶和 `setZAccent()`、`zAccentStyleSheet()` 从 `@zhzwz/z/accent` 引入。
 - 内置 `NLoadingBarProvider`、`NDialogProvider`、`NNotificationProvider`、`NMessageProvider`，里面可以直接用 `useMessage()` 等。嵌套的 `ZnConfigProvider` 不会重复套这几层。
 - 带一组内置的组件默认值（`znBuiltinDefaults`，如输入类可清空、下拉可搜索），用 `defaults` 按组件覆盖：
 
@@ -127,9 +129,7 @@ const schema: ZnFormSchema = {
 
 优先级从高到低：组件上显式传的 prop、内层 `defaults`、外层 `defaults`、内置默认值、naive 默认值。不在 `ZnConfigProvider` 里的组件使用 naive 默认值。
 
-`defaults` 只对组件自己声明的 prop 生效。写了组件不提供或不接受的值（如给 `ZnInput` 传 `modelValue` 或 `type: 'textarea'`）会被忽略，不会透传给 naive：那会绕过组件的约定，还可能作为属性写进 DOM 和 SSR 输出。
-
-`class`、`style` 等属性落到一个 `display: contents` 的包裹元素上，可用它挂全局样式或主题类。
+`defaults` 只对组件自己声明的 prop 生效。写了组件不提供或不接受的值（如给 `ZnInput` 传 `modelValue` 或 `type: 'textarea'`）会被忽略，不会透传给 naive：那会绕过组件的约定，还可能作为属性写进 DOM 和 SSR 输出。`class`、`style` 等未声明属性同样不接收。
 
 ### 图标
 

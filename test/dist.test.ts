@@ -14,6 +14,8 @@ const importDist = (fileName: string) => import(distUrl(fileName).href)
 const componentDependencies: Record<string, string[]> = {
   'z-flex': ['vue'],
   'z-icon': ['@iconify/vue', 'vue'],
+  'zn-accent-panel': ['@iconify/vue', 'naive-ui', 'vue'],
+  'zn-accent-switch': ['@iconify/vue', 'naive-ui', 'vue'],
   'zn-button': ['@iconify/vue', 'naive-ui', 'vue'],
   'zn-checkbox': ['naive-ui', 'vue'],
   'zn-checkbox-group': ['naive-ui', 'vue'],
@@ -48,7 +50,6 @@ const componentStyles: Record<string, string> = {
   'z-flex': '.z-flex',
   'z-icon': '.z-icon',
   'zn-button': '.zn-button--icon-only',
-  'zn-config-provider': '.zn-config-provider',
   'zn-date-range': '.zn-date-range__clear',
   'zn-form': '.zn-form',
   'zn-form-item': '.zn-form-item__help',
@@ -141,6 +142,16 @@ describe('dist', () => {
         }
       }
     })
+  })
+
+  it('ships accent helpers without vue or naive-ui', async () => {
+    const accent = await importDist('components/accent.js')
+    expect(accent.zAccentDefault).toBe('blue')
+    expect(accent.isZAccentName('cyan')).toBe(true)
+    expect([
+      ...collectExternalImports(distUrl('components/accent.js')),
+    ]).toEqual([])
+    expect(readDist('components/zn-config-provider/index.d.ts')).not.toContain('setZAccent')
   })
 
   it('leaves unknown components to the caller', async () => {

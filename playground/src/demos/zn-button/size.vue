@@ -1,11 +1,11 @@
 <!-- 尺寸、圆形和块级 -->
 <script setup lang="ts">
 import { ZnButton } from '@zhzwz/z/components/zn-button'
-import NaiveTheme from '@/components/NaiveTheme.vue'
+import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 </script>
 
 <template>
-  <NaiveTheme>
+  <ZnConfigProvider>
     <div class="row">
       <ZnButton size="tiny">
         极小
@@ -34,5 +34,5 @@ import NaiveTheme from '@/components/NaiveTheme.vue'
         块级按钮
       </ZnButton>
     </div>
-  </NaiveTheme>
+  </ZnConfigProvider>
 </template>

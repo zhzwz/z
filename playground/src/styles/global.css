@@ -13,7 +13,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root[data-theme-choice='auto'] {
+  :root[data-z-theme='auto'] {
     color-scheme: dark;
     --bg: #0d1117;
     --bg-soft: #161b22;
@@ -25,7 +25,7 @@
   }
 }
 
-:root[data-theme-choice='dark'] {
+:root[data-z-theme='dark'] {
   color-scheme: dark;
   --bg: #0d1117;
   --bg-soft: #161b22;
@@ -90,15 +90,15 @@ pre code {
  * shiki 的双主题输出把浅色和深色两套颜色都写在标签上（--shiki-dark / --shiki-dark-bg）。
  * 这里只按当前主题挑一套，不再自设背景，避免单主题的代码块出现浅底浅字。
  */
-:root[data-theme-choice='dark'] .astro-code,
-:root[data-theme-choice='dark'] .astro-code span {
+:root[data-z-theme='dark'] .astro-code,
+:root[data-z-theme='dark'] .astro-code span {
   background-color: var(--shiki-dark-bg) !important;
   color: var(--shiki-dark) !important;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root[data-theme-choice='auto'] .astro-code,
-  :root[data-theme-choice='auto'] .astro-code span {
+  :root[data-z-theme='auto'] .astro-code,
+  :root[data-z-theme='auto'] .astro-code span {
     background-color: var(--shiki-dark-bg) !important;
     color: var(--shiki-dark) !important;
   }
@@ -146,20 +146,45 @@ th {
   white-space: nowrap;
 }
 
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  height: 52px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.topbar__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: calc(var(--sidebar-width) + var(--content-width) + 200px);
+  height: 100%;
+  margin: 0 auto;
+}
+
+.topbar__tools {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .layout {
   display: flex;
   gap: 48px;
   max-width: calc(var(--sidebar-width) + var(--content-width) + 200px);
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 24px;
 }
 
 .sidebar {
   position: sticky;
-  top: 40px;
+  top: 76px;
   flex: 0 0 var(--sidebar-width);
   align-self: flex-start;
-  max-height: calc(100vh - 80px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
 }
 
@@ -225,6 +250,10 @@ th {
 }
 
 @media (max-width: 800px) {
+  .topbar {
+    padding: 0 16px;
+  }
+
   .layout {
     flex-direction: column;
     gap: 24px;

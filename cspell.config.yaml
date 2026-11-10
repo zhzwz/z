@@ -18,6 +18,8 @@ dictionaryDefinitions:
       - esbuild
       # 图标集 Iconify
       - iconify
+      # CSS 颜色空间 OKLCH
+      - oklch
       # Oxc 的格式化工具
       - oxfmt
       # Oxc 的 lint 工具

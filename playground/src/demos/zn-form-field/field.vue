@@ -4,7 +4,6 @@ import type { ZnFormSchema } from '@zhzwz/z/components/zn-form'
 import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 import { ZnForm } from '@zhzwz/z/components/zn-form'
 import { ref } from 'vue'
-import NaiveTheme from '@/components/NaiveTheme.vue'
 
 const data = ref<Record<string, unknown>>({})
 
@@ -36,11 +35,9 @@ const schema: ZnFormSchema = {
 
 <template>
   <ZnConfigProvider>
-    <NaiveTheme>
-      <ZnForm v-model="data" class="panel" :schema="schema" />
-      <p class="note">
-        {{ JSON.stringify(data) }}
-      </p>
-    </NaiveTheme>
+    <ZnForm v-model="data" class="panel" :schema="schema" />
+    <p class="note">
+      {{ JSON.stringify(data) }}
+    </p>
   </ZnConfigProvider>
 </template>

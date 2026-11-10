@@ -33,21 +33,7 @@ src/
 
    布局辅助类（`.row`、`.icons`）在 `src/styles/demo.css` 里。
 
-演示里如果用 naive-ui 的组件（`Zn*` 也算），要用 `NaiveTheme` 包一层，否则 naive-ui 不跟随站点的深浅色：
-
-```vue
-<script setup lang="ts">
-import NaiveTheme from '@/components/NaiveTheme.vue'
-</script>
-
-<template>
-  <NaiveTheme>
-    <div class="row">...</div>
-  </NaiveTheme>
-</template>
-```
-
-演示里如果包了 `ZnConfigProvider`，页面上改用 `client:only="vue"`。它默认 `inlineThemeDisabled`，服务端渲染时 naive-ui 会访问 `document`。没包的 `ZnButton` 仍用 `client:visible`。
+演示里如果用 naive-ui 的组件（`Zn*` 也算），要用 `ZnConfigProvider` 包一层。它会读 `<html data-z-theme>`，naive-ui 因此跟随站点深浅色。页面上改用 `client:only="vue"`：它默认 `inlineThemeDisabled`，服务端渲染时 naive-ui 会访问 `document`。
 
 2. 在 `src/content/docs/components/` 下新建 `<组件目录名>.mdx`：
 
@@ -76,7 +62,7 @@ import NaiveTheme from '@/components/NaiveTheme.vue'
 ## 约定
 
 - `public/` 下的文件会原样对外提供，谁都能读源码，别在里面放带注释的文件。图标因此放在 `src/assets/` 下，见本文末尾的「图标」。
-- 主题默认跟随系统，`src/theme.ts` 统一管：选择存在 `localStorage.theme`，结果写到 `<html data-theme-choice>`，深浅两套 CSS 变量据此切换。新增样式用 `var(--*)`，不要写死颜色。
+- 顶栏左侧是 `Brand`，右侧是亮暗切换和 `ZnAccentSwitch`。亮暗由 `src/theme.ts` 统一管：选择存在 `localStorage.theme`，结果写到 `<html data-z-theme>`，深浅两套 CSS 变量据此切换。`ZnConfigProvider` 读同一个属性。强调色只看 `<html data-z-accent>`。合法值和默认值来自 `@zhzwz/z/accent`，`ZnAccentSwitch` 只改这个属性，站点把它记在 `localStorage.accent`。色阶变量是 `--z-theme-accent-50` 到 `--z-theme-accent-950`。新增样式用 `var(--*)`，不要写死颜色。
 - 代码块的行号由 `global.css` 里的计数器生成，不进代码内容，复制不会带上。
 - 示例必须写成独立的 `.vue` 文件并静态引入。Astro 的 `client:*` 只认静态导入，用变量或动态组件传进去会在构建时报 `NoMatchingImport`。
 - `<Demo of={X}>` 的 `of` 和插槽里用的必须是同一个组件，`Demo` 靠组件身份找源码，写错会直接抛错。
@@ -89,7 +75,7 @@ import NaiveTheme from '@/components/NaiveTheme.vue'
 图标只有一份源文件：`src/assets/favicon.svg`，注释和排版都写在那里。`src/assets` 不会被当成静态资源对外提供，所以注释不会漏出去。两处消费它：
 
 - `/favicon.svg` 由 `src/pages/favicon.svg.ts` 这个端点输出，`faviconFile()` 会去掉注释与多余空白，产物压成一行。
-- 侧栏的 `components/Brand.astro` 用 `faviconInline()`，会去掉源文件里的 `<style>`，改用站点主题变量。原因是 favicon 只能跟随**系统**配色，而页面内的图标要跟随**站点**的主题选择，两者不能共用一段 `<style>`。
+- 顶栏的 `components/Brand.astro` 用 `faviconInline()`，会去掉源文件里的 `<style>`，改用站点主题变量。原因是 favicon 只能跟随**系统**配色，而页面内的图标要跟随**站点**的主题选择，两者不能共用一段 `<style>`。
 
 改图标只改 `src/assets/favicon.svg`，两边自动同步。几何规则：
 

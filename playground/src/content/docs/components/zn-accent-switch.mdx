@@ -1,0 +1,14 @@
+---
+title: ZnAccentSwitch
+description: 切换整页强调色，只改 html 上的 data-z-accent。
+order: 4
+---
+
+import Demo from '@/components/Demo.astro'
+import Switch from '@/demos/zn-accent-switch/switch.vue'
+
+不接收参数。点调色盘图标弹出 [`ZnAccentPanel`](/components/zn-accent-panel/)，选中色块后改 `<html data-z-accent>`。最外层 `ZnConfigProvider` 读到后换掉整页强调色。
+
+<Demo of={Switch}>
+  <Switch client:only="vue" />
+</Demo>

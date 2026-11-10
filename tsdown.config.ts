@@ -118,6 +118,7 @@ export default defineConfig({
   entry: [
     'index.ts',
     'eslint-config.ts',
+    'components/accent.ts',
     'resolver.ts',
     'components/*/index.ts',
   ],

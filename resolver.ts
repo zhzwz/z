@@ -3,6 +3,8 @@ import type { ComponentResolver } from 'unplugin-vue-components/types'
 const components = new Set([
   'ZFlex',
   'ZIcon',
+  'ZnAccentPanel',
+  'ZnAccentSwitch',
   'ZnButton',
   'ZnCheckbox',
   'ZnCheckboxGroup',

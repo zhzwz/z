@@ -10,7 +10,7 @@
   - `Z*`：自己实现的组件。
   - `Zn*`：naive-ui 的二次封装。
   - 不要用 `N` 开头的名字：`unplugin-vue-components` 的 `NaiveUiResolver` 会把它们解析到 `naive-ui`。
-- 组件间共用的配置由提供方组件导出，例如 `useZnConfig()` 从 `zn-config-provider/` 导出。只给组件用的函数直接放在 `components/` 下的源文件里，不要放进带 `index.ts` 的目录，否则会被当成组件入口打包。与组件无关的工具放根目录 `shared/`。
+- 组件间共用的配置由提供方组件导出，例如 `useZnConfig()` 从 `zn-config-provider/` 导出。只给组件用的函数直接放在 `components/` 下的源文件里，不要放进带 `index.ts` 的目录，否则会被当成组件入口打包。`accent.ts` 也放在这里，单独列在 `tsdown` 入口里，使用方从 `@zhzwz/z/accent` 引入。与组件无关的工具放根目录 `shared/`。
 
 ## 入口与依赖
 
@@ -60,6 +60,8 @@
      - 新增 prop 时先加进这个 props 对象，`useZnDefaults` 才会透传它。
      - `defaults` 是运行时对象，绕过类型检查的取值仍可能进来（如给 `ZnInput` 传 `type: 'textarea'`）。组件要在传给 naive 前把不该出现的值收回到自己的契约里，写法见 `zn-input/ZnInput.vue` 的 `nInputProps`。
    - 中文 placeholder 由 naive 的 `zhCN` 语言包提供，宽度 naive 已经撑满，不需要默认值；yuzu 滚动条内容的 `overflow: hidden` 不迁移。
+   - 最外层没传 `theme` 时读 `<html data-z-theme>`（`light`、`dark`、`auto`；没写按 `auto`）。切换用 `setZnTheme()`，只改这个属性。内层不要再传 `theme`，否则 naive 不会继承外层。
+   - 强调色只读 `<html data-z-accent>`（`blue`、`cyan`、`orange`）。没写或不认识时用 `zAccentDefault`（`blue`），并写回这个属性。不设 `accent` prop。色板、属性读写和 `--z-theme-accent-*` 样式表在 `components/accent.ts`，使用方从 `@zhzwz/z/accent` 引入。`ZnAccentPanel` 用 `ZFlex` 和 `ZnButton` 铺色块，`ZnAccentSwitch` 用 `NPopover` 把它弹出来，两者都只调用 `setZAccent()`。每套 11 阶（`50` 到 `950`）。亮色按钮用 600，暗色用 400。使用方写在 `themeOverrides.common` 里的 primary 色优先。
 8. 表单：
    - schema（`zn-form/schema.ts`）只放纯数据，能存成 JSON，供以后的 `ZnFormBuilder` 生成和编辑；函数类的能力（自定义校验、联动）只加在 `ZnFormItem` 的 props 上，不进 schema。
    - 新的字段组件要在 `zn-form/components.ts` 的 `znFormComponents` 登记，有具名 v-model 的写明 `models`；`validateZnFormSchema` 和设计器都依赖这份登记。未登记的组件名在 `ZnFormField` 里不渲染，并用 `console.error` 报一次（生产环境也保留，便于定位空字段）。

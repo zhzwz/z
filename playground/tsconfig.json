@@ -4,6 +4,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@zhzwz/z": ["../index.ts"],
+      "@zhzwz/z/accent": ["../components/accent.ts"],
       "@zhzwz/z/*": ["../*"]
     }
   },

@@ -3,20 +3,17 @@
 import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 import { ZnDate } from '@zhzwz/z/components/zn-date'
 import { ref } from 'vue'
-import NaiveTheme from '@/components/NaiveTheme.vue'
 
 const day = ref<string | null>('2024-01-01')
 </script>
 
 <template>
   <ZnConfigProvider>
-    <NaiveTheme>
-      <div class="stack panel">
-        <ZnDate v-model="day" />
-        <p class="note">
-          值：{{ day === null ? 'null' : day }}
-        </p>
-      </div>
-    </NaiveTheme>
+    <div class="stack panel">
+      <ZnDate v-model="day" />
+      <p class="note">
+        值：{{ day === null ? 'null' : day }}
+      </p>
+    </div>
   </ZnConfigProvider>
 </template>

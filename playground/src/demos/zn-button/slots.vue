@@ -1,11 +1,11 @@
 <!-- 插槽优先于同名的 prop -->
 <script setup lang="ts">
 import { ZnButton } from '@zhzwz/z/components/zn-button'
-import NaiveTheme from '@/components/NaiveTheme.vue'
+import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 </script>
 
 <template>
-  <NaiveTheme>
+  <ZnConfigProvider>
     <div class="row">
       <ZnButton label="来自 label" type="primary">
         来自默认插槽
@@ -17,5 +17,5 @@ import NaiveTheme from '@/components/NaiveTheme.vue'
         来自 #icon 插槽
       </ZnButton>
     </div>
-  </NaiveTheme>
+  </ZnConfigProvider>
 </template>

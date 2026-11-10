@@ -8,7 +8,6 @@ import { ZnForm } from '@zhzwz/z/components/zn-form'
 import { ZnFormItem } from '@zhzwz/z/components/zn-form-item'
 import { ZnInput } from '@zhzwz/z/components/zn-input'
 import { ref } from 'vue'
-import NaiveTheme from '@/components/NaiveTheme.vue'
 
 const data = ref({
   name: '',
@@ -24,23 +23,21 @@ function save(copy: ZnFormData) {
 
 <template>
   <ZnConfigProvider>
-    <NaiveTheme>
-      <ZnForm v-model="data" class="panel" :cols="2" @submit="save">
-        <ZnFormItem label="名称" path="name" required>
-          <ZnInput v-model="data.name" />
-        </ZnFormItem>
-        <ZnFormItem label="有效期" :path="{ start: 'start', end: 'end' }" required>
-          <ZnDateRange v-model:end="data.end" v-model:start="data.start" />
-        </ZnFormItem>
-        <ZnFormItem :span="2">
-          <ZnButton attr-type="submit" type="primary">
-            提交
-          </ZnButton>
-        </ZnFormItem>
-      </ZnForm>
-      <p v-if="result" class="note">
-        {{ result }}
-      </p>
-    </NaiveTheme>
+    <ZnForm v-model="data" class="panel" :cols="2" @submit="save">
+      <ZnFormItem label="名称" path="name" required>
+        <ZnInput v-model="data.name" />
+      </ZnFormItem>
+      <ZnFormItem label="有效期" :path="{ start: 'start', end: 'end' }" required>
+        <ZnDateRange v-model:end="data.end" v-model:start="data.start" />
+      </ZnFormItem>
+      <ZnFormItem :span="2">
+        <ZnButton attr-type="submit" type="primary">
+          提交
+        </ZnButton>
+      </ZnFormItem>
+    </ZnForm>
+    <p v-if="result" class="note">
+      {{ result }}
+    </p>
   </ZnConfigProvider>
 </template>

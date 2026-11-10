@@ -1,11 +1,11 @@
 <!-- 主题色与朴素按钮 -->
 <script setup lang="ts">
 import { ZnButton } from '@zhzwz/z/components/zn-button'
-import NaiveTheme from '@/components/NaiveTheme.vue'
+import { ZnConfigProvider } from '@zhzwz/z/components/zn-config-provider'
 </script>
 
 <template>
-  <NaiveTheme>
+  <ZnConfigProvider>
     <div class="row">
       <ZnButton>默认</ZnButton>
       <ZnButton type="primary">
@@ -41,5 +41,5 @@ import NaiveTheme from '@/components/NaiveTheme.vue'
         禁用
       </ZnButton>
     </div>
-  </NaiveTheme>
+  </ZnConfigProvider>
 </template>

@@ -1,13 +1,19 @@
 // 以使用方的身份对产物做类型检查，见 test/dist.test.ts。
+import type { ZAccentName, ZAccentStep } from '@zhzwz/z/accent'
 import type { ZFlexProps } from '@zhzwz/z/components/z-flex'
 import type { ZIconProps } from '@zhzwz/z/components/z-icon'
+import type { ZnAccentPanelProps } from '@zhzwz/z/components/zn-accent-panel'
+import type { ZnAccentSwitchProps } from '@zhzwz/z/components/zn-accent-switch'
 import type { ZnButtonProps } from '@zhzwz/z/components/zn-button'
 import type { ZnDefaults } from '@zhzwz/z/components/zn-config-provider'
 import type { ZnFormSchema } from '@zhzwz/z/components/zn-form'
 import type { ZnInputProps } from '@zhzwz/z/components/zn-input'
 import type { ZnSelectOption, ZnSelectProps, ZnSelectValue } from '@zhzwz/z/components/zn-select'
+import { setZAccent, zAccentDefault, zAccentSteps } from '@zhzwz/z/accent'
 import { ZFlex } from '@zhzwz/z/components/z-flex'
 import { ZIcon } from '@zhzwz/z/components/z-icon'
+import { ZnAccentPanel } from '@zhzwz/z/components/zn-accent-panel'
+import { ZnAccentSwitch } from '@zhzwz/z/components/zn-accent-switch'
 import { ZnButton } from '@zhzwz/z/components/zn-button'
 import { ZnCheckbox } from '@zhzwz/z/components/zn-checkbox'
 import { ZnCheckboxGroup } from '@zhzwz/z/components/zn-checkbox-group'
@@ -28,6 +34,8 @@ import { ZnSwitch } from '@zhzwz/z/components/zn-switch'
 import { ZnTextarea } from '@zhzwz/z/components/zn-textarea'
 
 export const components = [
+  ZnAccentPanel,
+  ZnAccentSwitch,
   ZFlex,
   ZIcon,
   ZnButton,
@@ -50,6 +58,12 @@ export const components = [
   ZnTextarea,
 ]
 
+export const accentName: ZAccentName = zAccentDefault
+export const accentStep: ZAccentStep = zAccentSteps[5]
+setZAccent(accentName)
+
+export const accentPanelProps: ZnAccentPanelProps = {}
+export const accentSwitchProps: ZnAccentSwitchProps = {}
 export const flexProps: ZFlexProps = { gap: 0.5, place: 'between center' }
 export const iconProps: ZIconProps = { icon: 'ic:round-add' }
 export const znButtonProps: ZnButtonProps = { icon: 'ic:round-add', label: '新建', type: 'primary' }

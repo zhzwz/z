@@ -1,0 +1,19 @@
+---
+title: ZnAccentPanel
+description: 强调色色块面板，选中后改 html 上的 data-z-accent。
+order: 4
+---
+
+import ApiTable from '@/components/ApiTable.astro'
+import Demo from '@/components/Demo.astro'
+import Panel from '@/demos/zn-accent-panel/panel.vue'
+
+不接收参数。色块来自色板，再加一套就会多出一块。选中后改 `<html data-z-accent>`，并抛出 `pick`。不需要弹出按钮时直接用它；要按钮用 `ZnAccentSwitch`。
+
+<Demo of={Panel}>
+  <Panel client:only="vue" />
+</Demo>
+
+## 接口
+
+<ApiTable name="ZnAccentPanel" />

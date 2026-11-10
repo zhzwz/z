@@ -1,11 +1,15 @@
 /**
  * 主题切换。默认跟随系统，用户选了浅色或深色后存进 localStorage 并覆盖系统设置。
- * 选择结果写在 <html data-theme-choice> 上，深浅两套令牌的取舍全部由 CSS 完成。
+ * 选择结果写在 <html data-z-theme> 上，站点样式和 ZnConfigProvider 都读它。
  */
+
+import { isZAccentName, zAccentDefault, zAccents } from '@zhzwz/z/accent'
+import { isZnThemeChoice, readZnTheme, setZnTheme } from '@zhzwz/z/components/zn-config-provider'
 
 export type ThemeChoice = 'auto' | 'dark' | 'light'
 
 const STORAGE_KEY = 'theme'
+const ACCENT_KEY = 'accent'
 
 export const choices: { label: string, value: ThemeChoice }[] = [
   { label: '跟随系统', value: 'auto' },
@@ -14,24 +18,37 @@ export const choices: { label: string, value: ThemeChoice }[] = [
 ]
 
 export function isThemeChoice(value: unknown): value is ThemeChoice {
-  return value === 'auto' || value === 'light' || value === 'dark'
+  return isZnThemeChoice(value)
 }
 
 /** 在 head 里同步执行，避免先渲染浅色再跳成深色。 */
 export const initScript = `
 (function () {
   var choice = localStorage.getItem('${STORAGE_KEY}')
-  document.documentElement.dataset.themeChoice =
+  document.documentElement.dataset.zTheme =
     choice === 'light' || choice === 'dark' ? choice : 'auto'
+  var accent = localStorage.getItem('${ACCENT_KEY}')
+  var accents = ${JSON.stringify(Object.keys(zAccents))}
+  document.documentElement.dataset.zAccent = accents.indexOf(accent) >= 0 ? accent : '${zAccentDefault}'
 })()
 `
 
-export function currentChoice(): ThemeChoice {
-  const value = document.documentElement.dataset.themeChoice
-  if (isThemeChoice(value)) {
-    return value
+/** 强调色写在属性上，这里只负责记住上次的选择。 */
+export function rememberAccent() {
+  const save = () => {
+    const value = document.documentElement.dataset.zAccent
+    if (isZAccentName(value)) {
+      localStorage.setItem(ACCENT_KEY, value)
+    }
   }
-  return 'auto'
+  new MutationObserver(save).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-z-accent'],
+  })
+}
+
+export function currentChoice(): ThemeChoice {
+  return readZnTheme()
 }
 
 export function setChoice(choice: ThemeChoice) {
@@ -40,7 +57,7 @@ export function setChoice(choice: ThemeChoice) {
   } else {
     localStorage.setItem(STORAGE_KEY, choice)
   }
-  document.documentElement.dataset.themeChoice = choice
+  setZnTheme(choice)
   window.dispatchEvent(new Event('theme-change'))
 }
 

@@ -25,6 +25,7 @@ export default defineConfig({
       alias: [
         // 演示代码按使用方的写法引入包名，实际指向仓库源码，改组件即生效，不必先构建。
         { find: /^@zhzwz\/z$/, replacement: `${root}/index.ts` },
+        { find: /^@zhzwz\/z\/accent$/, replacement: `${root}/components/accent.ts` },
         { find: /^@zhzwz\/z\/components\/([^/]+)$/, replacement: `${root}/components/$1/index.ts` },
         { find: /^@\//, replacement: `${src}/` },
       ],

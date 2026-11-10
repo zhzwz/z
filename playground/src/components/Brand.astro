@@ -24,20 +24,20 @@ const svg = faviconInline('brand__icon')
     stroke-width: 5.2;
   }
 
-  :root[data-theme-choice='dark'] .z-b {
+  :root[data-z-theme='dark'] .z-b {
     fill: #e6edf3;
   }
 
-  :root[data-theme-choice='dark'] .z-g {
+  :root[data-z-theme='dark'] .z-g {
     stroke: #0d1117;
   }
 
   @media (prefers-color-scheme: dark) {
-    :root[data-theme-choice='auto'] .z-b {
+    :root[data-z-theme='auto'] .z-b {
       fill: #e6edf3;
     }
 
-    :root[data-theme-choice='auto'] .z-g {
+    :root[data-z-theme='auto'] .z-g {
       stroke: #0d1117;
     }
   }
@@ -48,7 +48,6 @@ const svg = faviconInline('brand__icon')
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
     color: var(--text);
   }
 
