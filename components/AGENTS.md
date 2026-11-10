@@ -10,7 +10,7 @@
   - `Z*`：自己实现的组件。
   - `Zn*`：naive-ui 的二次封装。
   - 不要用 `N` 开头的名字：`unplugin-vue-components` 的 `NaiveUiResolver` 会把它们解析到 `naive-ui`。
-- 组件间共用的配置由提供方组件导出，例如 `useZnConfig()` 从 `zn-config-provider/` 导出。只给组件用的函数直接放在 `components/` 下的源文件里，不要放进带 `index.ts` 的目录，否则会被当成组件入口打包。`accent.ts` 也放在这里，单独列在 `tsdown` 入口里，使用方从 `@zhzwz/z/accent` 引入。与组件无关的工具放根目录 `shared/`。
+- 组件间共用的配置由提供方组件导出，例如 `useZnConfig()` 从 `zn-config-provider/` 导出。只给组件用的函数直接放在 `components/` 下的源文件里，不要放进带 `index.ts` 的目录，否则会被当成组件入口打包。`accent.ts`、`resolver.ts` 也放在这里，单独列在 `tsdown` 入口里，使用方从 `@zhzwz/z/accent`、`@zhzwz/z/resolver` 引入。与组件无关的工具放根目录 `shared/`。
 
 ## 入口与依赖
 
@@ -21,7 +21,7 @@
 - 使用方只需安装自己用到的组件的依赖，可选 peer 依赖写进根目录 `package.json`。
 - 每个组件的外部依赖登记在 `test/dist.test.ts` 的 `componentDependencies` 里，冒烟测试会沿产物的 import 核对；
 - README 中"需要安装的依赖"以它为准。
-- 新增组件后同步更新：`componentDependencies`、根目录 `resolver.ts` 的组件名单、README、playground 演示。冒烟测试会检查前两项是否遗漏。
+- 新增组件后同步更新：`componentDependencies`、`components/resolver.ts` 的组件名单、README、playground 演示。冒烟测试会检查前两项是否遗漏。使用方仍然从 `@zhzwz/z/resolver` 引入。
 
 ## Zn* 组件约定
 

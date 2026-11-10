@@ -117,7 +117,7 @@ describe('dist', () => {
     })
 
     it('is resolved by ZResolver', async () => {
-      const { ZResolver } = await importDist('resolver.js')
+      const { ZResolver } = await importDist('components/resolver.js')
       expect(ZResolver().resolve(name)).toEqual({
         name,
         from: `@zhzwz/z/components/${dir}`,
@@ -155,7 +155,7 @@ describe('dist', () => {
   })
 
   it('leaves unknown components to the caller', async () => {
-    const { ZResolver } = await importDist('resolver.js')
+    const { ZResolver } = await importDist('components/resolver.js')
     expect(ZResolver().resolve('ZUnknown')).toBeUndefined()
     expect(ZResolver().resolve('NButton')).toBeUndefined()
   })

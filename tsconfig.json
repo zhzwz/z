@@ -19,7 +19,6 @@
   "include": [
     "index.ts",
     "eslint-config.ts",
-    "resolver.ts",
     "shared/**/*.ts",
     "components/**/*.ts",
     "components/**/*.vue"

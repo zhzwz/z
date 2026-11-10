@@ -40,8 +40,8 @@
       "default": "./dist/eslint-config.js"
     },
     "./resolver": {
-      "types": "./dist/resolver.d.ts",
-      "default": "./dist/resolver.js"
+      "types": "./dist/components/resolver.d.ts",
+      "default": "./dist/components/resolver.js"
     },
     "./package.json": "./package.json"
   },
